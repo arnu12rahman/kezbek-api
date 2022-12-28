@@ -1,0 +1,27 @@
+services:
+  transactions:
+    build:
+      context: .
+      dockerfile: ./apps/transactions/Dockerfile
+      target: development
+    command: npm run start:dev transactions
+    env_file:
+      - ./apps/transactions/.env
+    depends_on:
+      - mongo
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3000:3000'
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: superuser
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
