@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/transactions/src",
+  "monorepo": true,
+  "root": "apps/transactions",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/transactions/tsconfig.app.json"
+  },
+  "projects": {
+    "transactions": {
+      "type": "application",
+      "root": "apps/transactions",
+      "entryFile": "main",
+      "sourceRoot": "apps/transactions/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/transactions/tsconfig.app.json"
+      }
+    },
+    "cashbacks": {
+      "type": "application",
+      "root": "apps/cashbacks",
+      "entryFile": "main",
+      "sourceRoot": "apps/cashbacks/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/cashbacks/tsconfig.app.json"
+      }
+    },
+    "rewards": {
+      "type": "application",
+      "root": "apps/rewards",
+      "entryFile": "main",
+      "sourceRoot": "apps/rewards/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/rewards/tsconfig.app.json"
+      }
+    },
+    "notifications": {
+      "type": "application",
+      "root": "apps/notifications",
+      "entryFile": "main",
+      "sourceRoot": "apps/notifications/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notifications/tsconfig.app.json"
+      }
+    }
+  }
+}
