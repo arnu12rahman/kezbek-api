@@ -6,22 +6,81 @@ services:
       target: development
     command: npm run start:dev transactions
     env_file:
-      - ./apps/transactions/.env
+      - ./apps/.env
     depends_on:
-      - mongo
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+      - cashbacks
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - '3000:3000'
 
-  mongo:
-    image: mongo
-    restart: always
+  cashbacks:
+    build:
+      context: .
+      dockerfile: ./apps/cashbacks/Dockerfile
+      target: development
+    command: npm run start:dev cashbacks
+    env_file:
+      - ./apps/.env
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3001:3001'
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
+
+  mongodb-primary:
+    image: bitnami/mongodb:latest
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: superuser
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_ROOT_PASSWORD=superuser
+      - MONGODB_DATABASE=kezbekapp
+      - MONGODB_REPLICA_SET_KEY=replicasetkey1212
+    volumes:
+      - 'mongodb_master_data:/bitnami'
+      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
       - '27017:27017'
-    volumes:
-      - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  mongodb-secondary:
+    image: bitnami/mongodb:latest
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
+      - MONGODB_REPLICA_SET_MODE=secondary
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
+      - MONGODB_INITIAL_PRIMARY_PORT_NUMBER=27017
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=superuser
+      - MONGODB_REPLICA_SET_KEY=replicasetkey1212
+
+  mongodb-arbiter:
+    image: bitnami/mongodb:latest
+    depends_on:
+      - mongodb-primary
+    environment:
+      - MONGODB_ADVERTISED_HOSTNAME=mongodb-arbiter
+      - MONGODB_REPLICA_SET_MODE=arbiter
+      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
+      - MONGODB_INITIAL_PRIMARY_PORT_NUMBER=27017
+      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=superuser
+      - MONGODB_REPLICA_SET_KEY=replicasetkey1212
+
+volumes:
+  mongodb_master_data:
+    driver: local

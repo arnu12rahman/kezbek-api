@@ -12,16 +12,16 @@ export class Transaction extends AbstractDocument {
     @Prop()
     customerMsisdn: string;
 
-    @Prop()
+    @Prop({ default: 0})
     partnerId: number;
 
-    @Prop()
+    @Prop({ default: 'partner_name'})
     partnerName: string;
 
     @Prop()
     partnerReferCode: string;
 
-    @Prop()
+    @Prop({ default: 'cashback_refer_code'})
     cashbackReferCode: string;
 
     @Prop()
@@ -30,13 +30,13 @@ export class Transaction extends AbstractDocument {
     @Prop()
     checkoutTotal: number;
 
-    @Prop()
+    @Prop({ default: 0})
     cashbackTrx: number;
 
-    @Prop()
+    @Prop({ default: 0})
     cashbackReward: number;
 
-    @Prop()
+    @Prop({ default: 0})
     cashbackTotal: number;
 }
 

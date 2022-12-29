@@ -15,6 +15,8 @@ describe('TransactionsController', () => {
   });
 
   describe('root', () => {
-
+    it('should return "Hello World!"', () => {
+      expect(transactionsController.getTransactions).toBe('Hello World!');
+    });
   });
 });

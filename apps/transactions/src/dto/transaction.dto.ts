@@ -24,7 +24,10 @@ export class TransactionDto {
     @IsPhoneNumber()
     customerMsisdn: string;
 
+    @ApiProperty({required: false})
     partnerId: number;
+
+    @ApiProperty({required: false})
     partnerName: string;
 
     @ApiProperty({required: true})
@@ -32,9 +35,7 @@ export class TransactionDto {
     @IsString()
     partnerReferCode: string;
 
-    @ApiProperty({required: true})
-    @IsString()
-    @IsNotEmpty()
+    @ApiProperty({required: false})
     cashbackReferCode: string;
 
     @ApiProperty({required: true})
@@ -47,7 +48,12 @@ export class TransactionDto {
     @IsNotEmpty()
     checkoutTotal: number;
 
+    @ApiProperty({required: false})
     cashbackTrx: number;
+
+    @ApiProperty({required: false})
     cashbackReward: number;
+
+    @ApiProperty({required: false})
     cashbackTotal: number;
 }
