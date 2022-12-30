@@ -5,6 +5,8 @@ services:
       dockerfile: ./apps/transactions/Dockerfile
       target: development
     command: npm run start:dev transactions
+    environment:
+      TZ: "Asia/Jakarta"
     env_file:
       - ./apps/.env
     depends_on:
@@ -13,6 +15,7 @@ services:
       - mongodb-arbiter
       - rabbitmq
       - cashbacks
+      - rewards
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -25,6 +28,8 @@ services:
       dockerfile: ./apps/cashbacks/Dockerfile
       target: development
     command: npm run start:dev cashbacks
+    environment:
+      TZ: "Asia/Jakarta"
     env_file:
       - ./apps/.env
     depends_on:
@@ -37,6 +42,27 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3001:3001'
+
+  rewards:
+    build:
+      context: .
+      dockerfile: ./apps/rewards/Dockerfile
+      target: development
+    command: npm run start:dev rewards
+    environment:
+      TZ: "Asia/Jakarta"
+    env_file:
+      - ./apps/.env
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3002:3002'
 
   rabbitmq:
     image: rabbitmq

@@ -16,7 +16,7 @@ async function bootstrap() {
   //initialitation swagger doc builder
   const configSwagger = new DocumentBuilder()
   .setTitle('Kezbek API Documentation')
-  .setDescription('Documentation API for Service Cashback')
+  .setDescription('Documentation API for Service Cashbacks')
   .setVersion('1.2')
   .addBasicAuth()
   .setExternalDoc('Postman Collection', 'doc-json')

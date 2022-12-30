@@ -1,14 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger/dist/decorators"
-import { Type } from "class-transformer";
-import { IsPositive, IsOptional, IsPhoneNumber, IsEmail, IsString, IsNotEmpty, IsDate } from "class-validator"
+import { IsPositive, IsOptional, IsPhoneNumber, IsEmail, IsString, IsNotEmpty, Min, IsDateString } from "class-validator"
 
 export class TransactionDto {
+
     @IsOptional()
     _id?: string
 
     @ApiProperty({required: true})
-    @Type(() => Date)
-    @IsDate()
+    @IsDateString()
     @IsNotEmpty()
     trxDate: string;
     
@@ -36,16 +35,20 @@ export class TransactionDto {
     partnerReferCode: string;
 
     @ApiProperty({required: false})
+    @IsOptional()
+    @IsString()
     cashbackReferCode: string;
 
     @ApiProperty({required: true})
     @IsPositive()
     @IsNotEmpty()
+    @Min(1)
     qty: number;
 
     @ApiProperty({required: true})
     @IsPositive()
     @IsNotEmpty()
+    @Min(1)
     checkoutTotal: number;
 
     @ApiProperty({required: false})

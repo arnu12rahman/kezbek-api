@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-
+import * as moment from 'moment';
 @Injectable()
 export class PageService {
     async generatePage(data, repo) {
@@ -19,7 +19,25 @@ export class PageService {
             total: totalDoc,
             page: page,
             pages: pages,
-            data: result
+            data: result.map(val => {
+                let trxDate = val.trxDate
+                let expDate = val.expDate
+
+                if (val.trxDate)
+                    trxDate = moment(val.trxDate).format('YYYY-MM-DD')
+
+                if (val.expDate)
+                    expDate = moment(val.expDate).format('YYYY-MM-DD')
+
+                return {
+                    ...val,
+                    trxDate,
+                    expDate,
+                    createdAt: moment(val.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+                    updatedAt: moment(val.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+                }
+
+            })
         }
 
         return finalData
