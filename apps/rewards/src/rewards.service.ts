@@ -4,14 +4,19 @@ import { Logger } from '@nestjs/common/services';
 import { TransactionsRepository } from 'apps/transactions/src/transactions.repository';
 import { CreateRewardDto } from './dto/reward/create-reward.dto';
 import { RewardsRepository } from './repository/rewards.repository';
+import { TiersRepository } from './repository/tiers.repository';
+import { TiersJourneyRepository } from './repository/tiers-journey.repository';
 import * as moment from 'moment';
-
+import { Mixin } from 'ts-mixer';
+import { TierService } from './service/tier.service';
 @Injectable()
-export class RewardsService extends PageService{
+export class RewardsService extends Mixin(PageService,TierService){
   private readonly logger = new Logger(RewardsService.name)
   constructor(
     private readonly transactionRepository: TransactionsRepository,
     private readonly rewardRepository: RewardsRepository,
+    private readonly tierRepository: TiersRepository,
+    private readonly tierJourneyRepository: TiersJourneyRepository,
   ){super()}
   
   create(createRewardDto: CreateRewardDto) {
@@ -36,23 +41,27 @@ export class RewardsService extends PageService{
 
   async calculateReward(data: any){
     //get current tier
-    const currTier = await this.getCurrentTier(data)
+    const currTier = await this.getCurrentTier(data, this.transactionRepository, this.tierRepository, this.tierJourneyRepository)
+    let cashbackReward 
+    cashbackReward = await this.getReward(currTier.tier, currTier.trxRecurring)
+
+    if(cashbackReward){
+      cashbackReward = cashbackReward.rewardAmount
+    }else{
+      cashbackReward = 0
+    }
+
+    this.transactionRepository.findOneAndUpdate({_id: data.transaction._id},{ "$set": {
+      cashbackReward: cashbackReward,
+    }})
   }
 
-  getCurrentTier(data: any){
-    //check if any trx in current month
-    const trxMonth = moment(data.transaction.trxDate).format('MM')
-    const countTrxMonth = this.transactionRepository.findOne({
-      $and: [{trxDate: `/-${trxMonth}-/`}, {trxDate: { $ne: data.transaction.trxDate }} ]
+  
+  getReward(tier: string, recurring: number){
+    return this.rewardRepository.findOne({
+      status: 1,
+      tier: tier,
+      recurring: recurring
     })
-
-    if(!countTrxMonth)
-      this.downgradeTier(data)
-
-    
-  }
-
-  downgradeTier(data: any){
-    
   }
 }
