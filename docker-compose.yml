@@ -16,6 +16,8 @@ services:
       - rabbitmq
       - cashbacks
       - rewards
+      - partners
+      - notifications
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -63,6 +65,46 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3002:3002'
+
+  partners:
+    build:
+      context: .
+      dockerfile: ./apps/partners/Dockerfile
+      target: development
+    command: npm run start:dev partners
+    environment:
+      TZ: "Asia/Jakarta"
+    env_file:
+      - ./apps/.env
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3003:3003'
+
+  notifications:
+    build:
+      context: .
+      dockerfile: ./apps/notifications/Dockerfile
+      target: development
+    command: npm run start:dev notifications
+    environment:
+      TZ: "Asia/Jakarta"
+    env_file:
+      - ./apps/.env
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
 
   rabbitmq:
     image: rabbitmq

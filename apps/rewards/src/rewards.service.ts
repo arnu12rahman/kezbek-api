@@ -23,8 +23,8 @@ export class RewardsService extends Mixin(PageService,TierService){
     return this.rewardRepository.create(createRewardDto)
   }
 
-  update(id: string, updateUserDto: CreateRewardDto) {
-    return this.rewardRepository.findOneAndUpdate({_id: id},updateUserDto)
+  update(id: string, updateRewardDto: CreateRewardDto) {
+    return this.rewardRepository.findOneAndUpdate({_id: id},updateRewardDto)
   }
 
   remove(id: string) {
@@ -51,9 +51,7 @@ export class RewardsService extends Mixin(PageService,TierService){
       cashbackReward = 0
     }
 
-    this.transactionRepository.findOneAndUpdate({_id: data.transaction._id},{ "$set": {
-      cashbackReward: cashbackReward,
-    }})
+    return cashbackReward
   }
 
   

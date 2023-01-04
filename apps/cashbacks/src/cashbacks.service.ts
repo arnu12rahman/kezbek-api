@@ -17,8 +17,8 @@ export class CashbacksService extends PageService {
     return this.cashbackRepository.create(createCashbackDto)
   }
 
-  update(id: string, updateUserDto: CreateCashbackDto) {
-    return this.cashbackRepository.findOneAndUpdate({ _id: id }, updateUserDto)
+  update(id: string, updateCashbackDto: CreateCashbackDto) {
+    return this.cashbackRepository.findOneAndUpdate({ _id: id }, updateCashbackDto)
   }
 
   remove(id: string) {
@@ -37,69 +37,52 @@ export class CashbacksService extends PageService {
 
   async calculateCashback(data: any) {
     let cashbackTrx
-    if (data.transaction.cashback_refer_code != 'cashback_refer_code')
-      cashbackTrx = await this.getByReferCode(data)
+    cashbackTrx = await this.getCashback(data)
 
-    if(!cashbackTrx)
-      cashbackTrx = await this.getByMinMaxQtyAmount(data)
-
-    if(!cashbackTrx)
-      cashbackTrx = await this.getByMinMaxQtyMinAmount(data)
-
-    if(!cashbackTrx)
-      cashbackTrx = await this.getByMinRefer(data)
-
-    if(!cashbackTrx){
-      cashbackTrx = 0
-    }else{
+    if(cashbackTrx){
       cashbackTrx = (cashbackTrx.percentageCashback / 100) * data.transaction.checkoutTotal
+    }else{
+      cashbackTrx = 0
     }
 
-    this.transactionRepository.findOneAndUpdate({_id: data.transaction._id},{ "$set": {
-      cashbackTrx: cashbackTrx,
-    }})
+    return cashbackTrx
   }
 
-  getByReferCode(data: any) {
+  getCashback(data: any){
     return this.cashbackRepository.findOne({
-      status: 1,
-      cashbackReferCode: data.transaction.cashbackReferCode
-    })
-  }
-
-  getByMinMaxQtyAmount(data: any) {
-    return this.cashbackRepository.findOne({
-      status: 1,
-      isSetMaxQty: 1,
-      minQty: { $gte: data.transaction.qty },
-      maxQty: { $lte: data.transaction.qty },
-      isSetMaxAmountTrans: 1,
       $or: [
-        { minAmountTrans: { $gt: data.transaction.checkoutTotal, $lt: data.transaction.checkoutTotal } },
-        { maxAmountTrans: { $gt: data.transaction.checkoutTotal, $lt: data.transaction.checkoutTotal } },
-        { minAmountTrans: { $lt: data.transaction.checkoutTotal }, maxAmountTrans: { $gt: data.transaction.checkoutTotal } }
+        {
+          status: 1,
+          cashbackReferCode: data.transaction.cashbackReferCode
+        },
+        {
+          status: 1,
+          isSetMaxQty: 1,
+          minQty: { $gte: data.transaction.qty },
+          maxQty: { $lte: data.transaction.qty },
+          isSetMaxAmountTrans: 1,
+          $or: [
+            { minAmountTrans: { $gt: data.transaction.checkoutTotal, $lt: data.transaction.checkoutTotal } },
+            { maxAmountTrans: { $gt: data.transaction.checkoutTotal, $lt: data.transaction.checkoutTotal } },
+            { minAmountTrans: { $lt: data.transaction.checkoutTotal }, maxAmountTrans: { $gt: data.transaction.checkoutTotal } }
+          ]
+        },
+        {
+          status: 1,
+          isSetMaxQty: 1,
+          minQty: { $gte: data.transaction.qty },
+          maxQty: { $lte: data.transaction.qty },
+          isSetMaxAmountTrans: 0,
+          minAmountTrans: { $gte: data.transaction.checkoutTotal },
+        },
+        {
+          status: 1,
+          isSetMaxQty: 0,
+          minQty: { $gte: data.transaction.qty },
+          isSetMaxAmountTrans: 0,
+          minAmountTrans: { $gte: data.transaction.checkoutTotal },
+        }
       ]
-    })
-  }
-  
-  getByMinMaxQtyMinAmount(data: any) {
-    return this.cashbackRepository.findOne({
-      status: 1,
-      isSetMaxQty: 1,
-      minQty: { $gte: data.transaction.qty },
-      maxQty: { $lte: data.transaction.qty },
-      isSetMaxAmountTrans: 0,
-      minAmountTrans: { $gte: data.transaction.checkoutTotal },
-    })
-  }
-
-  getByMinRefer(data: any) {
-    return this.cashbackRepository.findOne({
-      status: 1,
-      isSetMaxQty: 0,
-      minQty: { $gte: data.transaction.qty },
-      isSetMaxAmountTrans: 0,
-      minAmountTrans: { $gte: data.transaction.checkoutTotal },
     })
   }
 }

@@ -1,6 +1,6 @@
 import { RmqService } from '@app/common';
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
+import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreateRewardDto } from './dto/reward/create-reward.dto';
 import { RequestRewardDto } from './dto/reward/request-reward.dto';
@@ -35,9 +35,11 @@ export class RewardsController {
     return this.rewardsService.remove(id);
   }
 
-  @EventPattern('transaction_created')
+  @MessagePattern('calculate_reward')
   async handleTransactionCreated(@Payload() data: any, @Ctx() context: RmqContext){
-    this.rewardsService.calculateReward(data)
+    const cashbackReward = await this.rewardsService.calculateReward(data)
     this.rmqService.ack(context)
+
+    return cashbackReward
   }
 }

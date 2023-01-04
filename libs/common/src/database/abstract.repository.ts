@@ -15,7 +15,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   constructor(
     protected readonly model: Model<TDocument>,
     private readonly connection: Connection,
-  ) {}
+  ) { }
 
   async create(
     document: Omit<TDocument, '_id'>,
@@ -84,11 +84,11 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return this.model.find(filterQuery, {}, { lean: true }).sort(ordering);
   }
 
-  async getByCondition(filterQuery: FilterQuery<TDocument>, option?: any | null){
+  async getByCondition(filterQuery: FilterQuery<TDocument>, option?: any | null) {
     return this.model.find(filterQuery, {}, option)
   }
 
-  async countDocuments(filterQuery: FilterQuery<TDocument>){
+  async countDocuments(filterQuery: FilterQuery<TDocument>) {
     return this.model.countDocuments(filterQuery)
   }
 

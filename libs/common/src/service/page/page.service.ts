@@ -8,7 +8,7 @@ export class PageService {
         const pages = Math.ceil(totalDoc / limit)
         const result = await repo.getByCondition(where, {
             sort: {
-                updatedAt: -1,
+                createdAt: -1,
             },
             skip: (page - 1) * limit,
             limit: Number(limit),
