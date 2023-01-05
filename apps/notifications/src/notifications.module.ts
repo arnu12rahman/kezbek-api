@@ -6,8 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import * as dotenv from 'dotenv'
 import { join } from 'path';
+import * as dotenv from 'dotenv'
 dotenv.config();
 @Module({
   imports: [
@@ -26,6 +26,11 @@ dotenv.config();
           user: process.env.USER_MAIL,
           pass: process.env.PASS_MAIL
         }
+        // host: 'smtp.sendgrid.net',
+        // auth: {
+        //     user: 'apikey',
+        //     pass: process.env.SG_API_KEY
+        // }
       },
       template: {
         dir: join(__dirname, 'mails'),

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common/services';
 import { MailerService } from '@nestjs-modules/mailer';
+import * as dotenv from 'dotenv'
+dotenv.config();
 @Injectable()
 export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name)
@@ -8,7 +10,7 @@ export class NotificationsService {
 
   async sendNotif(data: any) {
     await this.mailService.sendMail({
-      from: 'arnu12rahman@gmail.com',
+      from: process.env.USER_MAIL,
       to: data.transData.customerEmail,
       subject: "[Kezbek Info] - Congratulations, You're Getting Cashback",
       template: 'mail',
@@ -16,5 +18,7 @@ export class NotificationsService {
         cashback: data.transData
       },
     })
+
+    return "send mail success"
   }
 }

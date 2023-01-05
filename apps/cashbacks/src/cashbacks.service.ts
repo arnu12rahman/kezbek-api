@@ -1,15 +1,13 @@
 import { PageService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common/services';
-import { TransactionsRepository } from 'apps/transactions/src/transactions.repository';
 import { CashbacksRepository } from './cashbacks.repository';
-import { CreateCashbackDto } from './dto/create-cashback.dto';
+import { CreateCashbackDto } from './dto/request/create-cashback.dto';
 
 @Injectable()
 export class CashbacksService extends PageService {
   private readonly logger = new Logger(CashbacksService.name)
   constructor(
-    private readonly transactionRepository: TransactionsRepository,
     private readonly cashbackRepository: CashbacksRepository,
   ) { super() }
 

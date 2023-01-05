@@ -1,10 +1,13 @@
 import { RmqService } from '@app/common';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { CreateRewardDto } from './dto/reward/create-reward.dto';
-import { RequestRewardDto } from './dto/reward/request-reward.dto';
-import { ResponseRewardDto } from './dto/reward/response-reward.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpStatus } from '@nestjs/common';
+import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
+import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { CreateRewardDto } from './dto/reward/request/create-reward.dto';
+import { RequestRewardDto } from './dto/reward/request/request-reward.dto';
+import { CreateRewardResponseDto } from './dto/reward/response/create-reward.response.dto';
+import { ResponseBadRequestDto } from './dto/reward/response/response-bad-request.dto';
+import { ResponseRewardDto } from './dto/reward/response/response-reward.dto';
+import { ResponseServerErrorDto } from './dto/reward/response/response-server-error.dto';
 import { RewardsService } from './rewards.service';
 @ApiTags('Rewards')
 @Controller('rewards')
@@ -15,8 +18,17 @@ export class RewardsController {
   ) {}
 
   @Post()
-  create(@Body() createRewardDto: CreateRewardDto) {
-    return this.rewardsService.create(createRewardDto);
+  @ApiOkResponse({type: CreateRewardResponseDto})
+  @ApiBadRequestResponse({type: ResponseBadRequestDto})
+  @ApiInternalServerErrorResponse({type: ResponseServerErrorDto})
+  async create(@Body() createRewardDto: CreateRewardDto) {
+    const rewardData = await this.rewardsService.create(createRewardDto);
+
+    return new CreateRewardResponseDto(
+      HttpStatus.OK,
+      `Create new reward data successfully`,
+      rewardData
+    )
   }
 
   @Get()
@@ -26,19 +38,38 @@ export class RewardsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRewardDto: CreateRewardDto) {
-    return this.rewardsService.update(id, updateRewardDto);
+  @ApiOkResponse({type: CreateRewardResponseDto})
+  @ApiBadRequestResponse({type: ResponseBadRequestDto})
+  @ApiInternalServerErrorResponse({type: ResponseServerErrorDto})
+  async update(@Param('id') id: string, @Body() updateRewardDto: CreateRewardDto) {
+    const rewardData = await this.rewardsService.update(id, updateRewardDto);
+
+    return new CreateRewardResponseDto(
+      HttpStatus.OK,
+      `reward data success updated`,
+      rewardData
+    )
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.rewardsService.remove(id);
+  @ApiOkResponse({type: CreateRewardResponseDto})
+  @ApiBadRequestResponse({type: ResponseBadRequestDto})
+  @ApiInternalServerErrorResponse({type: ResponseServerErrorDto})
+  async remove(@Param('id') id: string) {
+    const rewardData =  await this.rewardsService.remove(id);
+
+    return new CreateRewardResponseDto(
+      HttpStatus.OK,
+      `reward data success deleted`,
+      rewardData
+    )
   }
 
   @MessagePattern('calculate_reward')
-  async handleTransactionCreated(@Payload() data: any, @Ctx() context: RmqContext){
+  async handleTransactionCreated(@Payload() data: any, @Ctx() context?: RmqContext){
     const cashbackReward = await this.rewardsService.calculateReward(data)
-    this.rmqService.ack(context)
+    if(context)
+      this.rmqService.ack(context)
 
     return cashbackReward
   }

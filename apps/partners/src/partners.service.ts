@@ -25,7 +25,7 @@ export class PartnersService extends PageService{
     }})
   }
 
-  async getPartner(data){
+  async getPartners(data){
     data = {...data, status: 1}
     return this.generatePage(data, this.partnerRepository)
   }

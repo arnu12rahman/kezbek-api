@@ -7,9 +7,9 @@ import * as moment from 'moment';
 export class TierService {
     async trxThisMonth(data: any, repo) {
         //check if any trx in current month
-        const trxMonthDate = moment(data.transaction.trxDate).format('MM')
+        const trxMonthDate = moment(data.transaction.trxDate).subtract(1, 'months').format('YYYY-MM-DD')
         let trxMonthData = await repo.findOne({
-            $and: [{ trxDate: new RegExp(`-${trxMonthDate}-`, "i") }, { createdAt: { $ne: data.transaction.createdAt } }]
+            $and: [{ trxDate: {$gte: trxMonthDate, $lte: data.transaction.trxDate} }, { createdAt: { $ne: data.transaction.createdAt } }]
         })
 
         return trxMonthData

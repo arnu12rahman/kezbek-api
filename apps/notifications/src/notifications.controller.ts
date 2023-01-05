@@ -8,8 +8,9 @@ export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService,  private readonly rmqService: RmqService) {}
 
   @EventPattern('send_notification')
-  async handleSendNotification(@Payload() data: any, @Ctx() context: RmqContext){
+  async handleSendNotification(@Payload() data: any, @Ctx() context?: RmqContext){
     this.notificationsService.sendNotif(data)
-    this.rmqService.ack(context)
+    if(context)
+      this.rmqService.ack(context)
   }
 }

@@ -2,7 +2,7 @@ import { PageService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common/services';
 import { TransactionsRepository } from 'apps/transactions/src/transactions.repository';
-import { CreateRewardDto } from './dto/reward/create-reward.dto';
+import { CreateRewardDto } from './dto/reward/request/create-reward.dto';
 import { RewardsRepository } from './repository/rewards.repository';
 import { TiersRepository } from './repository/tiers.repository';
 import { TiersJourneyRepository } from './repository/tiers-journey.repository';

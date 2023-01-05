@@ -1,11 +1,14 @@
 import { RmqService } from '@app/common';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpStatus } from '@nestjs/common';
+import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
+import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CashbacksService } from './cashbacks.service';
-import { CreateCashbackDto } from './dto/create-cashback.dto';
-import { RequestCashbackDto } from './dto/request-cashback.dto';
-import { ResponseCashbackDto } from './dto/response-cashback.dto';
+import { CreateCashbackDto } from './dto/request/create-cashback.dto';
+import { RequestCashbackDto } from './dto/request/request-cashback.dto';
+import { CreateCachbackResponseDto } from './dto/response/create-cashback.response.dto';
+import { ResponseBadRequestDto } from './dto/response/response-bad-request.dto';
+import { ResponseCashbackDto } from './dto/response/response-cashback.dto';
+import { ResponseServerErrorDto } from './dto/response/response-server-error.dto';
 @ApiTags('Cashbacks')
 @Controller('cashbacks')
 export class CashbacksController {
@@ -15,8 +18,17 @@ export class CashbacksController {
   ) {}
   
   @Post()
-  create(@Body() createCashbackDto: CreateCashbackDto) {
-    return this.cashbacksService.create(createCashbackDto);
+  @ApiOkResponse({type: CreateCachbackResponseDto})
+  @ApiBadRequestResponse({type: ResponseBadRequestDto})
+  @ApiInternalServerErrorResponse({type: ResponseServerErrorDto})
+  async create(@Body() createCashbackDto: CreateCashbackDto) {
+    const cashbackData = await this.cashbacksService.create(createCashbackDto);
+
+    return new CreateCachbackResponseDto(
+      HttpStatus.OK,
+      `Create new cashback data successfully`,
+      cashbackData
+    )
   }
 
   @Get()
@@ -26,19 +38,38 @@ export class CashbacksController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCashbackDto: CreateCashbackDto) {
-    return this.cashbacksService.update(id, updateCashbackDto);
+  @ApiOkResponse({type: CreateCachbackResponseDto})
+  @ApiBadRequestResponse({type: ResponseBadRequestDto})
+  @ApiInternalServerErrorResponse({type: ResponseServerErrorDto})
+  async update(@Param('id') id: string, @Body() updateCashbackDto: CreateCashbackDto) {
+    const cashbackData = await this.cashbacksService.update(id, updateCashbackDto);
+
+    return new CreateCachbackResponseDto(
+      HttpStatus.OK,
+      `cashback data success updated`,
+      cashbackData
+    )
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cashbacksService.remove(id);
+  @ApiOkResponse({type: CreateCachbackResponseDto})
+  @ApiBadRequestResponse({type: ResponseBadRequestDto})
+  @ApiInternalServerErrorResponse({type: ResponseServerErrorDto})
+  async remove(@Param('id') id: string) {
+    const cashbackData = await this.cashbacksService.remove(id);
+
+    return new CreateCachbackResponseDto(
+      HttpStatus.OK,
+      `cashback data success deleted`,
+      cashbackData
+    )
   }
 
   @MessagePattern('calculate_cashback')
-  async handleTransactionCreated(@Payload() data: any, @Ctx() context: RmqContext){
+  async handleTransactionCreated(@Payload() data: any, @Ctx() context?: RmqContext){
     const cashbackTrx = await this.cashbacksService.calculateCashback(data)
-    this.rmqService.ack(context)
+    if(context)
+      this.rmqService.ack(context)
 
     return cashbackTrx
   }

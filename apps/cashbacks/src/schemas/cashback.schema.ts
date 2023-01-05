@@ -1,5 +1,6 @@
 import { AbstractDocument } from "@app/common";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { ObjectId } from "mongoose";
 
 @Schema({ versionKey: false, timestamps: true })
 export class Cashback extends AbstractDocument {
