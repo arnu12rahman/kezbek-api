@@ -22,7 +22,7 @@ async function bootstrap() {
   .setTitle('Kezbek API Documentation')
   .setDescription('Documentation API for Service Transactions')
   .setVersion('1.2')
-  .addBasicAuth()
+  .addCookieAuth()
   .setExternalDoc('Postman Collection', 'doc-json')
   .build()
 

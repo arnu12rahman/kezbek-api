@@ -19,6 +19,7 @@ services:
       - partners
       - notifications
       - wallets
+      - auth
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -39,6 +40,7 @@ services:
       - mongodb-primary
       - mongodb-secondary
       - mongodb-arbiter
+      - auth
       - rabbitmq
     volumes:
       - .:/usr/src/app
@@ -60,6 +62,7 @@ services:
       - mongodb-primary
       - mongodb-secondary
       - mongodb-arbiter
+      - auth
       - rabbitmq
     volumes:
       - .:/usr/src/app
@@ -81,6 +84,7 @@ services:
       - mongodb-primary
       - mongodb-secondary
       - mongodb-arbiter
+      - auth
       - rabbitmq
     volumes:
       - .:/usr/src/app
@@ -99,6 +103,7 @@ services:
     env_file:
       - ./apps/.env
     depends_on:
+      - auth
       - rabbitmq
     volumes:
       - .:/usr/src/app
@@ -118,12 +123,34 @@ services:
       - mongodb-primary
       - mongodb-secondary
       - mongodb-arbiter
+      - auth
       - rabbitmq
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     ports:
       - '3004:3004'
+
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: npm run start:dev auth
+    environment:
+      TZ: "Asia/Jakarta"
+    env_file:
+      - ./apps/.env
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary
+      - mongodb-arbiter
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3005:3005'
 
   rabbitmq:
     image: rabbitmq

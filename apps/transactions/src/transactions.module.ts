@@ -1,4 +1,5 @@
-import { DatabaseModule, RmqModule } from '@app/common';
+import { AuthModule, DatabaseModule, RmqModule } from '@app/common';
+import { AUTH_SERVICE } from '@app/common/auth/services';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -26,6 +27,7 @@ import { TransactionsService } from './transactions.service';
     RmqModule.register({name: NOTIFICATION_SERVICE}),
     RmqModule.register({name: PARTNER_SERVICE}),
     RmqModule.register({name: WALLET_SERVICE}),
+    AuthModule
   ],
   controllers: [TransactionsController],
   providers: [TransactionsService, TransactionsRepository],

@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { WalletsController } from './wallets.controller';
 import { WalletsService } from './wallets.service';
 import * as Joi from 'joi';
-import { DatabaseModule, RmqModule } from '@app/common';
+import { AuthModule, DatabaseModule, RmqModule } from '@app/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Wallet, WalletSchema } from './schemas/wallet.schema';
 import { WalletsRepository } from './wallets.repository';
@@ -22,7 +22,8 @@ import { WalletsRepository } from './wallets.repository';
     }),
     DatabaseModule,
     MongooseModule.forFeature([{name: Wallet.name, schema: WalletSchema}]),
-    RmqModule
+    RmqModule,
+    AuthModule
   ],
   controllers: [WalletsController],
   providers: [WalletsService, WalletsRepository],

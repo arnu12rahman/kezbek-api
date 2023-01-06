@@ -1,5 +1,5 @@
-import { RmqService } from '@app/common';
-import { Controller, Get, Query, HttpStatus } from '@nestjs/common';
+import { JwtAuthGuard, RmqService } from '@app/common';
+import { Controller, Get, Query, HttpStatus, UseGuards } from '@nestjs/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { RequestWalletDto } from './dto/request/request-wallet.dto';
@@ -8,6 +8,7 @@ import { ResponseWalletDto } from './dto/response/response-wallet.dto';
 import { WalletsService } from './wallets.service';
 
 @ApiTags('Wallets')
+@UseGuards(JwtAuthGuard)
 @Controller('wallets')
 export class WalletsController {
   constructor(private readonly walletsService: WalletsService, private readonly rmqService: RmqService) { }

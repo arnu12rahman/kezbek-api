@@ -1,4 +1,4 @@
-import { DatabaseModule, RmqModule } from '@app/common';
+import { AuthModule, DatabaseModule, RmqModule } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -24,7 +24,8 @@ import { Cashback, CashbackSchema } from './schemas/cashback.schema';
     }),
     DatabaseModule,
     MongooseModule.forFeature([{name: Transaction.name, schema: TransactionSchema},{name: Cashback.name, schema: CashbackSchema}]),
-    RmqModule
+    RmqModule,
+    AuthModule
   ],
   controllers: [CashbacksController],
   providers: [CashbacksService, TransactionsRepository, CashbacksRepository],

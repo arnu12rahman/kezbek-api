@@ -1,4 +1,4 @@
-import { DatabaseModule, RmqModule } from '@app/common';
+import { AuthModule, DatabaseModule, RmqModule } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -33,7 +33,8 @@ import { Tier, TierSchema } from './schemas/tier.schema';
       {name: Tier.name, schema: TierSchema},
       {name: TierJournery.name, schema: TierJournerySchema},
     ]),
-    RmqModule
+    RmqModule,
+    AuthModule
   ],
   controllers: [RewardsController],
   providers: [RewardsService, TransactionsRepository,RewardsRepository,TiersRepository, TiersJourneyRepository],

@@ -17,10 +17,10 @@ export class TransactionsService extends PageService {
     @Inject(WALLET_SERVICE) private walletClient: ClientProxy,
   ) { super() }
 
-  async createTransaction(request: CreateTransactionDto) {
+  async createTransaction(request: CreateTransactionDto, authentication: string) {
     const session = await this.transactionRepository.startTransaction()
     try {
-      const partnerData = await firstValueFrom(this.partnerClient.send('get_partner_detail', { request }))
+      const partnerData = await firstValueFrom(this.partnerClient.send('get_partner_detail', { request, Authentication: authentication }))
       if(!partnerData)
         throw new NotFoundException('Partner Data Not Found!')
 
@@ -28,11 +28,11 @@ export class TransactionsService extends PageService {
       const transaction = await this.transactionRepository.create(request, { session })
 
       //get cashback
-      const cashbackReward = await firstValueFrom(this.rewardClient.send('calculate_reward', { transaction }))
-      const cashbackTrx = await firstValueFrom(this.cashbackClient.send('calculate_cashback', { transaction }))
+      const cashbackReward = await firstValueFrom(this.rewardClient.send('calculate_reward', { transaction, Authentication: authentication }))
+      const cashbackTrx = await firstValueFrom(this.cashbackClient.send('calculate_cashback', { transaction, Authentication: authentication }))
 
       //calculate cashback
-      const cashbackTotal = this.calculateCashback(transaction._id, cashbackReward, cashbackTrx)
+      const cashbackTotal = this.calculateCashback(transaction._id, cashbackReward, cashbackTrx, authentication)
       await session.commitTransaction()
 
       return cashbackTotal
@@ -46,12 +46,12 @@ export class TransactionsService extends PageService {
     return this.generatePage(data, this.transactionRepository)
   }
 
-  async calculateCashback(_id: any, cashbackReward: number, cashbackTrx: number) {
+  async calculateCashback(_id: any, cashbackReward: number, cashbackTrx: number, authentication: string) {
     const transData = await this.transactionRepository.upsert({ _id: _id }, { cashbackReward: cashbackReward, cashbackTrx: cashbackTrx, cashbackTotal: cashbackTrx + cashbackReward })
 
     //call service notification 
-    await lastValueFrom(this.notificationClient.emit('send_notification', { transData }))
-    await lastValueFrom(this.walletClient.emit('save_to_wallet', { transData }))
+    await lastValueFrom(this.notificationClient.emit('send_notification', { transData, Authentication: authentication }))
+    await lastValueFrom(this.walletClient.emit('save_to_wallet', { transData, Authentication: authentication }))
 
     return transData
   }

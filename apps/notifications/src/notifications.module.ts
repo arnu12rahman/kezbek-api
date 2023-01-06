@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RmqModule } from '@app/common';
+import { AuthModule, RmqModule } from '@app/common';
 import { NotificationsController } from './notifications.controller';
 import { NotificationsService } from './notifications.service';
 import { ConfigModule } from '@nestjs/config';
@@ -35,7 +35,8 @@ dotenv.config();
         },
       }
     }),
-    RmqModule
+    RmqModule,
+    AuthModule
   ],
   controllers: [NotificationsController],
   providers: [NotificationsService],

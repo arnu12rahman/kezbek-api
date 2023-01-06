@@ -1,9 +1,10 @@
-import { RmqService } from '@app/common';
+import { JwtAuthGuard, RmqService } from '@app/common';
 import { Ctx, EventPattern, Payload, RmqContext } from '@nestjs/microservices';
-import { Controller } from '@nestjs/common';
+import { Controller,UseGuards } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 
 @Controller()
+@UseGuards(JwtAuthGuard)
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService,  private readonly rmqService: RmqService) {}
 

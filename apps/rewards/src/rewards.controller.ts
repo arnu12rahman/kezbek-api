@@ -1,5 +1,5 @@
-import { RmqService } from '@app/common';
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpStatus } from '@nestjs/common';
+import { JwtAuthGuard, RmqService } from '@app/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpStatus, UseGuards } from '@nestjs/common';
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreateRewardDto } from './dto/reward/request/create-reward.dto';
@@ -10,6 +10,7 @@ import { ResponseRewardDto } from './dto/reward/response/response-reward.dto';
 import { ResponseServerErrorDto } from './dto/reward/response/response-server-error.dto';
 import { RewardsService } from './rewards.service';
 @ApiTags('Rewards')
+@UseGuards(JwtAuthGuard)
 @Controller('rewards')
 export class RewardsController {
   constructor(
