@@ -24,7 +24,7 @@ export class TransactionDto {
     customerMsisdn: string;
 
     @ApiProperty({required: false})
-    partnerId: number;
+    partnerId: string;
 
     @ApiProperty({required: false})
     partnerName: string;

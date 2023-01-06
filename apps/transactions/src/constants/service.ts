@@ -1,3 +1,5 @@
 export const CASHBACK_SERVICE       = 'CASHBACK'
 export const REWARD_SERVICE         = 'REWARD'
 export const NOTIFICATION_SERVICE   = 'NOTIFICATION'
+export const PARTNER_SERVICE        = 'PARTNER'
+export const WALLET_SERVICE         = 'WALLET'

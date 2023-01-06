@@ -41,6 +41,17 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     return document;
   }
 
+  async findOneSort(filterQuery: FilterQuery<TDocument>, option?: any | null) {
+    const document = this.model.findOne(filterQuery, {}, { lean: true }).sort(option);
+
+    if (!document) {
+      this.logger.warn('Document not found with filterQuery', filterQuery);
+      throw new NotFoundException('Document not found.');
+    }
+
+    return document;
+  }
+
   async findOneAndUpdate(
     filterQuery: FilterQuery<TDocument>,
     update: UpdateQuery<TDocument>,

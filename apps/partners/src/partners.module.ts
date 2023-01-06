@@ -1,4 +1,4 @@
-import { DatabaseModule } from '@app/common';
+import { DatabaseModule, RmqModule } from '@app/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,6 +13,8 @@ import { Partner, PartnerSchema } from './schemas/partner.schema';
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
+        RABBIT_MQ_URI: Joi.string().required(),
+        RABBIT_MQ_PARTNER_QUEUE: Joi.string().required(),
         MONGODB_URI: Joi.string().required(),
         PORT_PARTNERS: Joi.number().required()
       }),
@@ -20,6 +22,7 @@ import { Partner, PartnerSchema } from './schemas/partner.schema';
     }),
     DatabaseModule,
     MongooseModule.forFeature([{name: Partner.name, schema: PartnerSchema}]),
+    RmqModule
   ],
   controllers: [PartnersController],
   providers: [PartnersService, PartnersRepository],

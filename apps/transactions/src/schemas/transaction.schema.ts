@@ -12,8 +12,8 @@ export class Transaction extends AbstractDocument {
     @Prop()
     customerMsisdn: string;
 
-    @Prop({ default: 0})
-    partnerId: number;
+    @Prop({ default: 'partnerId001'})
+    partnerId: string;
 
     @Prop({ default: 'partner_name'})
     partnerName: string;

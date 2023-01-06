@@ -10,12 +10,14 @@ export class NotificationsService {
 
   async sendNotif(data: any) {
     await this.mailService.sendMail({
-      from: process.env.USER_MAIL,
+      from: process.env.MAIL_FROM,
       to: data.transData.customerEmail,
       subject: "[Kezbek Info] - Congratulations, You're Getting Cashback",
       template: 'mail',
       context: {
-        cashback: data.transData
+        transactionId: data.transData._id,
+        partnerName: data.transData.partnerName,
+        cashback: new Intl.NumberFormat('en-US').format(data.transData.cashbackTotal)
       },
     })
 

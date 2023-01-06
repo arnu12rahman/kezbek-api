@@ -21,16 +21,11 @@ dotenv.config();
     }),
     MailerModule.forRoot({
       transport: {
-        service: 'gmail',
+        host: process.env.MAIL_HOST,
         auth: {
-          user: process.env.USER_MAIL,
-          pass: process.env.PASS_MAIL
+            user: process.env.USER_MAIL,
+            pass: process.env.PASS_MAIL
         }
-        // host: 'smtp.sendgrid.net',
-        // auth: {
-        //     user: 'apikey',
-        //     pass: process.env.SG_API_KEY
-        // }
       },
       template: {
         dir: join(__dirname, 'mails'),

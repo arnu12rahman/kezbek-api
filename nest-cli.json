@@ -42,7 +42,9 @@
       "entryFile": "main",
       "sourceRoot": "apps/notifications/src",
       "compilerOptions": {
-        "assets": ["mails/**/*"], 
+        "assets": [
+          "mails/**/*"
+        ],
         "watchAssets": true,
         "tsConfigPath": "apps/notifications/tsconfig.app.json"
       }
@@ -56,15 +58,6 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
-    "patners": {
-      "type": "application",
-      "root": "apps/patners",
-      "entryFile": "main",
-      "sourceRoot": "apps/patners/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/patners/tsconfig.app.json"
-      }
-    },
     "partners": {
       "type": "application",
       "root": "apps/partners",
@@ -72,6 +65,15 @@
       "sourceRoot": "apps/partners/src",
       "compilerOptions": {
         "tsConfigPath": "apps/partners/tsconfig.app.json"
+      }
+    },
+    "wallets": {
+      "type": "application",
+      "root": "apps/wallets",
+      "entryFile": "main",
+      "sourceRoot": "apps/wallets/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/wallets/tsconfig.app.json"
       }
     }
   }

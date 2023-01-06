@@ -29,4 +29,8 @@ export class PartnersService extends PageService{
     data = {...data, status: 1}
     return this.generatePage(data, this.partnerRepository)
   }
+
+  async getPartnerDetail(data: any){
+    return this.partnerRepository.findOne({partnerReferCode: data.request.partnerReferCode})
+  }
 }

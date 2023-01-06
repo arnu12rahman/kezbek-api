@@ -127,3 +127,17 @@ export const findPartnerStub = (): ResponsePartnerDto => {
         },
     }
 }
+
+export const transactionSub = () => {
+    return {
+        transactions: {
+            "trxDate": "2022-12-12",
+            "customerEmail": "arstrois@gmail.com",
+            "customerMsisdn": "+628111379309",
+            "partnerReferCode": "shp_kzb_",
+            "cashbackReferCode": "testcodepromo",
+            "qty": 1,
+            "checkoutTotal": 10000
+        }
+    }
+}

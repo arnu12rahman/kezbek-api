@@ -1,10 +1,11 @@
 import { RmqService } from "@app/common"
 import { ConfigService } from "@nestjs/config"
 import { Test } from "@nestjs/testing"
+import { PartnerDto } from "../dto/core/partner.dto"
 import { CreatePartnerDto } from "../dto/request/create-reward.dto"
 import { ResponsePartnerDto } from "../dto/response/response-partner.dto"
 import { PartnersService } from "../partners.service"
-import { partnerCreateStub, partnerDeleteStub, partnerUpdateStub, findPartnerStub, responsePartnerCreateStub, responsePartnerDeleteStub, responsePartnerUpdateStub } from "./stubs/partner.stub"
+import { partnerCreateStub, partnerDeleteStub, partnerUpdateStub, findPartnerStub, responsePartnerCreateStub, responsePartnerDeleteStub, responsePartnerUpdateStub, transactionSub, partnerStub } from "./stubs/partner.stub"
 
 jest.mock('../partners.service')
 
@@ -80,6 +81,20 @@ describe('PartnersService', () => {
 
       test('then is should return a partner data', async () => {
         expect(responsePartner).toEqual(findPartnerStub())
+      })
+    })
+  })
+
+  describe('getPartnerDetail',() => {
+    describe('when getPartnerDetail service is called', () => {
+      let partnerData: PartnerDto 
+      
+      beforeEach(async () => {
+        partnerData = await partnersService.getPartnerDetail(transactionSub())
+      })
+
+      test('then is should return a cashback trx value', async () => {
+        expect(partnerData).toEqual(partnerStub())
       })
     })
   })

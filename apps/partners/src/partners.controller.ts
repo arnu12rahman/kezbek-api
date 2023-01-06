@@ -1,4 +1,6 @@
+import { RmqService } from '@app/common';
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpStatus } from '@nestjs/common';
+import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PartnerDto } from './dto/core/partner.dto';
 import { RequestPartnerDto } from './dto/request/request-partner.dto';
@@ -11,7 +13,7 @@ import { PartnersService } from './partners.service';
 @ApiTags('Partners')
 @Controller('partners')
 export class PartnersController {
-  constructor(private readonly partnersService: PartnersService) {}
+  constructor(private readonly partnersService: PartnersService,  private readonly rmqService: RmqService) {}
 
   @Post()
   @ApiOkResponse({type: CreatePartnerResponseDto})
@@ -59,5 +61,14 @@ export class PartnersController {
       `partner data success deleted`,
       partnerData
     )
+  }
+
+  @MessagePattern('get_partner_detail')
+  async handleTransactionCreated(@Payload() data: any, @Ctx() context?: RmqContext){
+    const partnerData = await this.partnersService.getPartnerDetail(data)
+    if(context)
+      this.rmqService.ack(context)
+
+    return partnerData
   }
 }

@@ -18,6 +18,7 @@ services:
       - rewards
       - partners
       - notifications
+      - wallets
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -98,6 +99,22 @@ services:
     env_file:
       - ./apps/.env
     depends_on:
+      - rabbitmq
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+
+  wallets:
+    build:
+      context: .
+      dockerfile: ./apps/wallets/Dockerfile
+      target: development
+    command: npm run start:dev wallets
+    environment:
+      TZ: "Asia/Jakarta"
+    env_file:
+      - ./apps/.env
+    depends_on:
       - mongodb-primary
       - mongodb-secondary
       - mongodb-arbiter
@@ -105,6 +122,8 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    ports:
+      - '3004:3004'
 
   rabbitmq:
     image: rabbitmq

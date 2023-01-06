@@ -1,12 +1,13 @@
 import { RmqService } from "@app/common"
 import { ConfigService } from "@nestjs/config"
 import { Test } from "@nestjs/testing"
+import { PartnerDto } from "../dto/core/partner.dto"
 import { RequestPartnerDto } from "../dto/request/request-partner.dto"
 import { CreatePartnerResponseDto } from "../dto/response/create-partnerresponse.dto"
 import { ResponsePartnerDto } from "../dto/response/response-partner.dto"
 import { PartnersController } from "../partners.controller"
 import { PartnersService } from "../partners.service"
-import { partnerCreateStub, partnerUpdateStub, findPartnerStub, responsePartnerCreateStub, responsePartnerDeleteStub,  responsePartnerUpdateStub } from "./stubs/partner.stub"
+import { partnerCreateStub, partnerUpdateStub, findPartnerStub, responsePartnerCreateStub, responsePartnerDeleteStub,  responsePartnerUpdateStub, partnerStub, transactionSub } from "./stubs/partner.stub"
 
 jest.mock('../partners.service')
 
@@ -102,6 +103,24 @@ describe('PartnersController', () => {
 
       test('then is should return a partner data', async () => {
         expect(responsePartner).toEqual(findPartnerStub())
+      })
+    })
+  })
+
+  describe('handleTransactionCreated',() => {
+    describe('when handleTransactionCreated is called', () => {
+      let partnerData: PartnerDto 
+      
+      beforeEach(async () => {
+        partnerData = await partnersController.handleTransactionCreated(transactionSub())
+      })
+
+      test('then it should call calculateCashback from cashbacksService', () => {
+        expect(partnersService.getPartnerDetail).toBeCalledWith(transactionSub())
+      })
+
+      test('then is should return a partners data', async () => {
+        expect(partnerData).toEqual(partnerStub())
       })
     })
   })

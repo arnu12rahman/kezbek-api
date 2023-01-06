@@ -2,7 +2,6 @@ import { CreateCashbackDto } from "../../dto/request/create-cashback.dto";
 import { CreateCachbackResponseDto } from "../../dto/response/create-cashback.response.dto";
 import { ResponseCashbackDto } from "../../dto/response/response-cashback.dto";
 import { HttpStatus } from "@nestjs/common";
-import { CashbackDto } from "../../dto/core/cashback.dto";
 import { Cashback } from "../../schemas/cashback.schema";
 
 export const cashbackStub = (): Cashback => {
