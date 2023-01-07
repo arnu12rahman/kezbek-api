@@ -4,6 +4,9 @@ services:
       context: .
       dockerfile: ./apps/transactions/Dockerfile
       target: development
+    restart: unless-stopped
+    container_name: transactions
+    hostname: transactions
     command: npm run start:dev transactions
     environment:
       TZ: "Asia/Jakarta"
@@ -31,6 +34,9 @@ services:
       context: .
       dockerfile: ./apps/cashbacks/Dockerfile
       target: development
+    restart: unless-stopped
+    container_name: cashbacks
+    hostname: cashbacks
     command: npm run start:dev cashbacks
     environment:
       TZ: "Asia/Jakarta"
@@ -53,6 +59,9 @@ services:
       context: .
       dockerfile: ./apps/rewards/Dockerfile
       target: development
+    restart: unless-stopped
+    container_name: rewards
+    hostname: rewards
     command: npm run start:dev rewards
     environment:
       TZ: "Asia/Jakarta"
@@ -75,6 +84,9 @@ services:
       context: .
       dockerfile: ./apps/partners/Dockerfile
       target: development
+    restart: unless-stopped
+    container_name: partners
+    hostname: partners
     command: npm run start:dev partners
     environment:
       TZ: "Asia/Jakarta"
@@ -97,6 +109,9 @@ services:
       context: .
       dockerfile: ./apps/notifications/Dockerfile
       target: development
+    restart: unless-stopped
+    container_name: notifications
+    hostname: notifications
     command: npm run start:dev notifications
     environment:
       TZ: "Asia/Jakarta"
@@ -114,6 +129,9 @@ services:
       context: .
       dockerfile: ./apps/wallets/Dockerfile
       target: development
+    restart: unless-stopped
+    container_name: wallets
+    hostname: wallets
     command: npm run start:dev wallets
     environment:
       TZ: "Asia/Jakarta"
@@ -136,6 +154,9 @@ services:
       context: .
       dockerfile: ./apps/auth/Dockerfile
       target: development
+    restart: unless-stopped
+    container_name: auth
+    hostname: auth
     command: npm run start:dev auth
     environment:
       TZ: "Asia/Jakarta"
@@ -154,11 +175,17 @@ services:
 
   rabbitmq:
     image: rabbitmq
+    restart: on-failure
+    container_name: rabbitmq
+    hostname: rabbitmq
     ports:
       - '5672:5672'
 
   mongodb-primary:
     image: bitnami/mongodb:latest
+    restart: on-failure
+    container_name: mongodb-primary
+    hostname: mongodb-primary
     environment:
       - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
       - MONGODB_REPLICA_SET_MODE=primary
@@ -173,6 +200,9 @@ services:
 
   mongodb-secondary:
     image: bitnami/mongodb:latest
+    restart: on-failure
+    container_name: mongodb-secondary
+    hostname: mongodb-secondary
     depends_on:
       - mongodb-primary
     environment:
@@ -185,6 +215,9 @@ services:
 
   mongodb-arbiter:
     image: bitnami/mongodb:latest
+    restart: on-failure
+    container_name: mongodb-arbiter
+    hostname: mongodb-arbiter
     depends_on:
       - mongodb-primary
     environment:
