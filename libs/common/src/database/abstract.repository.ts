@@ -3,7 +3,6 @@ import {
   FilterQuery,
   Model,
   Types,
-  UpdateQuery,
   SaveOptions,
   Connection,
 } from 'mongoose';
