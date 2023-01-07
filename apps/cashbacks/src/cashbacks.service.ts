@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common/services';
 import { CashbacksRepository } from './cashbacks.repository';
 import { CreateCashbackDto } from './dto/request/create-cashback.dto';
+import { RemoveCashbackDto } from './dto/request/remove-cashback.dto';
 
 @Injectable()
 export class CashbacksService extends PageService {
@@ -19,14 +20,10 @@ export class CashbacksService extends PageService {
     return this.cashbackRepository.findOneAndUpdate({ _id: id }, updateCashbackDto)
   }
 
-  remove(id: string) {
-    return this.cashbackRepository.findOneAndUpdate({ _id: id }, {
-      "$set": {
-        status: 0,
-        isDeleted: 1
-      }
-    })
+  remove(id: string, updateCashbackDto: RemoveCashbackDto) {
+    return this.cashbackRepository.findOneAndUpdate({ _id: id }, updateCashbackDto)
   }
+  
 
   async getCashbacks(data) {
     data = { ...data, status: 1 }

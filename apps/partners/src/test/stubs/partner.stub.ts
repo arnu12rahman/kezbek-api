@@ -1,5 +1,5 @@
 import { HttpStatus } from "@nestjs/common";
-import { CreatePartnerDto } from "../../dto/request/create-reward.dto";
+import { CreatePartnerDto } from "../../dto/request/create-partner.dto";
 import { CreatePartnerResponseDto } from "../../dto/response/create-partnerresponse.dto";
 import { ResponsePartnerDto } from "../../dto/response/response-partner.dto";
 import { Partner } from "../../schemas/partner.schema";

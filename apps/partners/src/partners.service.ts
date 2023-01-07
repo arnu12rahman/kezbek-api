@@ -1,6 +1,7 @@
 import { PageService } from '@app/common';
 import { Injectable } from '@nestjs/common';
 import { Logger } from '@nestjs/common/services';
+import { RemovePartnerDto } from './dto/request/remove-partnerdto';
 import { PartnersRepository } from './partners.repository';
 
 @Injectable()
@@ -18,11 +19,8 @@ export class PartnersService extends PageService{
     return this.partnerRepository.findOneAndUpdate({_id: id},updatePartnerDto)
   }
 
-  remove(id: string) {
-    return this.partnerRepository.findOneAndUpdate({_id: id},{ "$set": {
-      status: 0,
-      isDeleted: 1
-    }})
+  remove(id: string, updatePartnerDto: RemovePartnerDto) {
+    return this.partnerRepository.findOneAndUpdate({_id: id}, updatePartnerDto)
   }
 
   async getPartners(data){

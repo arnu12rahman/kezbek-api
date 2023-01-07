@@ -3,6 +3,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpStatus, U
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PartnerDto } from './dto/core/partner.dto';
+import { RemovePartnerDto } from './dto/request/remove-partnerdto';
 import { RequestPartnerDto } from './dto/request/request-partner.dto';
 import { CreatePartnerResponseDto } from './dto/response/create-partnerresponse.dto';
 import { ResponseBadRequestDto } from './dto/response/response-bad-request.dto';
@@ -55,7 +56,10 @@ export class PartnersController {
   @ApiBadRequestResponse({type: ResponseBadRequestDto})
   @ApiInternalServerErrorResponse({type: ResponseServerErrorDto})
   async remove(@Param('id') id: string) {
-    const partnerData = await this.partnersService.remove(id);
+    let updatePartnerDto = new RemovePartnerDto
+    updatePartnerDto.status = 0
+    updatePartnerDto.isDeleted = 1
+    const partnerData = await this.partnersService.remove(id,updatePartnerDto);
 
     return new CreatePartnerResponseDto(
       HttpStatus.OK,

@@ -3,6 +3,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpStatus, U
 import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreateRewardDto } from './dto/reward/request/create-reward.dto';
+import { RemoveRewardDto } from './dto/reward/request/remove-rewarddto';
 import { RequestRewardDto } from './dto/reward/request/request-reward.dto';
 import { CreateRewardResponseDto } from './dto/reward/response/create-reward.response.dto';
 import { ResponseBadRequestDto } from './dto/reward/response/response-bad-request.dto';
@@ -57,7 +58,10 @@ export class RewardsController {
   @ApiBadRequestResponse({type: ResponseBadRequestDto})
   @ApiInternalServerErrorResponse({type: ResponseServerErrorDto})
   async remove(@Param('id') id: string) {
-    const rewardData =  await this.rewardsService.remove(id);
+    let updateRewardDto = new RemoveRewardDto
+    updateRewardDto.status = 0
+    updateRewardDto.isDeleted = 1
+    const rewardData =  await this.rewardsService.remove(id,updateRewardDto);
 
     return new CreateRewardResponseDto(
       HttpStatus.OK,

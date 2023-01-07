@@ -9,6 +9,7 @@ import { TiersJourneyRepository } from './repository/tiers-journey.repository';
 import * as moment from 'moment';
 import { Mixin } from 'ts-mixer';
 import { TierService } from './service/tier.service';
+import { RemoveRewardDto } from './dto/reward/request/remove-rewarddto';
 @Injectable()
 export class RewardsService extends Mixin(PageService,TierService){
   private readonly logger = new Logger(RewardsService.name)
@@ -27,11 +28,8 @@ export class RewardsService extends Mixin(PageService,TierService){
     return this.rewardRepository.findOneAndUpdate({_id: id},updateRewardDto)
   }
 
-  remove(id: string) {
-    return this.rewardRepository.findOneAndUpdate({_id: id},{ "$set": {
-      status: 0,
-      isDeleted: 1
-    }})
+  remove(id: string, updateRewardDto: RemoveRewardDto) {
+    return this.rewardRepository.findOneAndUpdate({_id: id},updateRewardDto)
   }
 
   async getRewards(data){

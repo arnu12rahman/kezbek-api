@@ -4,6 +4,7 @@ import { Ctx, MessagePattern, Payload, RmqContext } from '@nestjs/microservices'
 import { ApiBadRequestResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CashbacksService } from './cashbacks.service';
 import { CreateCashbackDto } from './dto/request/create-cashback.dto';
+import { RemoveCashbackDto } from './dto/request/remove-cashback.dto';
 import { RequestCashbackDto } from './dto/request/request-cashback.dto';
 import { CreateCachbackResponseDto } from './dto/response/create-cashback.response.dto';
 import { ResponseBadRequestDto } from './dto/response/response-bad-request.dto';
@@ -57,7 +58,11 @@ export class CashbacksController {
   @ApiBadRequestResponse({type: ResponseBadRequestDto})
   @ApiInternalServerErrorResponse({type: ResponseServerErrorDto})
   async remove(@Param('id') id: string) {
-    const cashbackData = await this.cashbacksService.remove(id);
+    let updateCashbackDto = new RemoveCashbackDto
+    updateCashbackDto.status = 0
+    updateCashbackDto.isDeleted = 1
+
+    const cashbackData = await this.cashbacksService.remove(id, updateCashbackDto);
 
     return new CreateCachbackResponseDto(
       HttpStatus.OK,
