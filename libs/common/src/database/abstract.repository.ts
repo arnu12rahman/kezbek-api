@@ -58,6 +58,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   ) {
     const document = this.model.findOneAndUpdate(filterQuery, update, {
       lean: true,
+      upsert: true,
       new: true,
     });
 
