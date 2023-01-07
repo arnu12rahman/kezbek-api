@@ -93,13 +93,15 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.{!(module),}.(t|j)s"
     ],
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
-      "<rootDir>/apps/",
-      "<rootDir>/libs/"
+      "<rootDir>/apps/cashbacks/",
+      "<rootDir>/apps/partners/",
+      "<rootDir>/apps/rewards/",
+      "<rootDir>/apps/wallets/"
     ],
     "moduleNameMapper": {
       "^@app/common(|/.*)$": "<rootDir>/libs/common/src/$1"

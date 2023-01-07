@@ -44,6 +44,15 @@ export const walletCreateStub = (): CreateWalletDto => {
         isDeleted: 0
     }
 }
+export const walletDataSubmit = () => {
+    return {
+        transactionId: "63b512c9b315e8427c643118",
+        trxDate: "2022-12-12",
+        customerEmail: "arstrois@gmail.com",
+        customerMsisdn: "+628111379309",
+        balance: 38000,
+    }
+}
 
 export const responseWalletCreateStub = new CreateWalletResponseDto(
     HttpStatus.OK,

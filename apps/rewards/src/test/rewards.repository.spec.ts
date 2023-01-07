@@ -81,7 +81,7 @@ describe('RewardsRepository', () => {
             })
 
             test('then it should call the findOneAndUpdate function on rewardModel', () => {
-                expect(rewardModel.findOneAndUpdate).toHaveBeenCalledWith(rewardFilterQuery, rewardStub(), { lean: true, new: true })
+                expect(rewardModel.findOneAndUpdate).toHaveBeenCalledWith(rewardFilterQuery, rewardStub(), { lean: true, upsert: true, new: true })
             })
 
             test('then it should return as reward', () => {

@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config"
 import { Test } from "@nestjs/testing"
 import { PartnerDto } from "../dto/core/partner.dto"
 import { CreatePartnerDto } from "../dto/request/create-partner.dto"
+import { RemovePartnerDto } from "../dto/request/remove-partnerdto"
 import { ResponsePartnerDto } from "../dto/response/response-partner.dto"
 import { PartnersService } from "../partners.service"
 import { partnerCreateStub, partnerDeleteStub, partnerUpdateStub, findPartnerStub, responsePartnerCreateStub, responsePartnerDeleteStub, responsePartnerUpdateStub, transactionSub, partnerStub } from "./stubs/partner.stub"
@@ -41,7 +42,7 @@ describe('PartnersService', () => {
       let partnerData: CreatePartnerDto
 
       beforeEach(async () => {
-        partnerData = await partnersService.update('63b661bbf111cd23e52fdc6a',partnerUpdateStub())
+        partnerData = await partnersService.update('63b661bbf111cd23e52fdc6a', partnerUpdateStub())
       })
 
       test('then is should return a updated partner data', async () => {
@@ -53,9 +54,11 @@ describe('PartnersService', () => {
   describe('remove', () => {
     describe('when remove service is called', () => {
       let partnerData: CreatePartnerDto
-
+      let updatePartnerDto = new RemovePartnerDto
+      updatePartnerDto.status = 0
+      updatePartnerDto.isDeleted = 1
       beforeEach(async () => {
-        partnerData = await partnersService.remove('63b661bbf111cd23e52fdc6a')
+        partnerData = await partnersService.remove('63b661bbf111cd23e52fdc6a',updatePartnerDto)
       })
 
       test('then is should return a deleted partner data', async () => {
@@ -85,10 +88,10 @@ describe('PartnersService', () => {
     })
   })
 
-  describe('getPartnerDetail',() => {
+  describe('getPartnerDetail', () => {
     describe('when getPartnerDetail service is called', () => {
-      let partnerData: PartnerDto 
-      
+      let partnerData: PartnerDto
+
       beforeEach(async () => {
         partnerData = await partnersService.getPartnerDetail(transactionSub())
       })

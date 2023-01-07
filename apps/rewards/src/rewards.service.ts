@@ -6,7 +6,6 @@ import { CreateRewardDto } from './dto/reward/request/create-reward.dto';
 import { RewardsRepository } from './repository/rewards.repository';
 import { TiersRepository } from './repository/tiers.repository';
 import { TiersJourneyRepository } from './repository/tiers-journey.repository';
-import * as moment from 'moment';
 import { Mixin } from 'ts-mixer';
 import { TierService } from './service/tier.service';
 import { RemoveRewardDto } from './dto/reward/request/remove-rewarddto';

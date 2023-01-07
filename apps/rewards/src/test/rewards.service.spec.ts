@@ -2,9 +2,10 @@ import { RmqService } from "@app/common"
 import { ConfigService } from "@nestjs/config"
 import { Test } from "@nestjs/testing"
 import { CreateRewardDto } from "../dto/reward/request/create-reward.dto"
+import { RemoveRewardDto } from "../dto/reward/request/remove-rewarddto"
 import { ResponseRewardDto } from "../dto/reward/response/response-reward.dto"
 import { RewardsService } from "../rewards.service"
-import { rewardCreateStub, rewardDeleteStub, rewardUpdateStub, findRewardStub, responseRewardCreateStub, responseRewardDeleteStub, responseCashbackReward, responseRewardUpdateStub, transactionSub } from "./stubs/reward.stub"
+import { rewardCreateStub, rewardDeleteStub, rewardUpdateStub, findRewardStub, responseCashbackReward, transactionSub } from "./stubs/reward.stub"
 
 jest.mock('../rewards.service')
 
@@ -52,9 +53,11 @@ describe('RewardsService', () => {
   describe('remove', () => {
     describe('when remove service is called', () => {
       let rewardData: CreateRewardDto
-
+      let updateRewardDto = new RemoveRewardDto
+      updateRewardDto.status = 0
+      updateRewardDto.isDeleted = 1
       beforeEach(async () => {
-        rewardData = await rewardsService.remove('63b661bbf111cd23e52fdc6a')
+        rewardData = await rewardsService.remove('63b661bbf111cd23e52fdc6a',updateRewardDto)
       })
 
       test('then is should return a deleted reward data', async () => {

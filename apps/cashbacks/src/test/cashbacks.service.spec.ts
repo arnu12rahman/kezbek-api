@@ -3,6 +3,7 @@ import { ConfigService } from "@nestjs/config"
 import { Test } from "@nestjs/testing"
 import { CashbacksService } from "../cashbacks.service"
 import { CreateCashbackDto } from "../dto/request/create-cashback.dto"
+import { RemoveCashbackDto } from "../dto/request/remove-cashback.dto"
 import { ResponseCashbackDto } from "../dto/response/response-cashback.dto"
 import { cashbackCreateStub, cashbackDeleteStub, cashbackUpdateStub, findCashbackStub, responseCashbackCreateStub, responseCashbackDeleteStub, responseCashbackTrx, responseCashbackUpdateStub, transactionSub } from "./stubs/cashback.stub"
 
@@ -40,7 +41,7 @@ describe('CashbacksService', () => {
       let cashbackData: CreateCashbackDto
 
       beforeEach(async () => {
-        cashbackData = await cashbacksService.update('63b661bbf111cd23e52fdc6a',cashbackUpdateStub())
+        cashbackData = await cashbacksService.update('63b661bbf111cd23e52fdc6a', cashbackUpdateStub())
       })
 
       test('then is should return a updated cashback data', async () => {
@@ -52,9 +53,11 @@ describe('CashbacksService', () => {
   describe('remove', () => {
     describe('when remove service is called', () => {
       let cashbackData: CreateCashbackDto
-
+      let updateCashbackDto = new RemoveCashbackDto
+      updateCashbackDto.status = 0
+      updateCashbackDto.isDeleted = 1
       beforeEach(async () => {
-        cashbackData = await cashbacksService.remove('63b661bbf111cd23e52fdc6a')
+        cashbackData = await cashbacksService.remove('63b661bbf111cd23e52fdc6a', updateCashbackDto)
       })
 
       test('then is should return a deleted cashback data', async () => {
@@ -84,10 +87,10 @@ describe('CashbacksService', () => {
     })
   })
 
-  describe('calculateCashback',() => {
+  describe('calculateCashback', () => {
     describe('when calculateCashback service is called', () => {
-      let cashbackTrx: number 
-      
+      let cashbackTrx: number
+
       beforeEach(async () => {
         cashbackTrx = await cashbacksService.calculateCashback(transactionSub())
       })

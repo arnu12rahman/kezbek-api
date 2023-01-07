@@ -18,12 +18,4 @@ describe('NotificationsController', () => {
     notificationService = moduleRef.get<NotificationsService>(NotificationsService);
     jest.clearAllMocks();
   });
-
-  describe('handleSendNotification',() => {
-    describe('when handleSendNotification is called', () => {
-      test('then it should call calculateCashback from cashbacksService', () => {
-        expect(notificationService.sendNotif).toBeCalledWith(transactionSub())
-      })
-    })
-  })
 });

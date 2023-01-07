@@ -1,4 +1,6 @@
-import { RmqService } from "@app/common"
+import { JwtAuthGuard, RmqService } from "@app/common"
+import { AUTH_SERVICE } from "@app/common/auth/services"
+import { UsersService } from "../../../auth/src/users/users.service"
 import { ConfigService } from "@nestjs/config"
 import { Test } from "@nestjs/testing"
 import { CashbacksController } from "../cashbacks.controller"
@@ -7,18 +9,23 @@ import { RequestCashbackDto } from "../dto/request/request-cashback.dto"
 import { CreateCachbackResponseDto } from "../dto/response/create-cashback.response.dto"
 import { ResponseCashbackDto } from "../dto/response/response-cashback.dto"
 import { cashbackCreateStub, cashbackUpdateStub, findCashbackStub, responseCashbackCreateStub, responseCashbackDeleteStub, responseCashbackTrx, responseCashbackUpdateStub, transactionSub } from "./stubs/cashback.stub"
+import { RemoveCashbackDto } from "../dto/request/remove-cashback.dto"
 
 jest.mock('../cashbacks.service')
 
 describe('CashbacksController', () => {
   let cashbacksController: CashbacksController;
   let cashbacksService: CashbacksService;
+  const mockUserService = {}
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [],
       controllers: [CashbacksController],
-      providers: [CashbacksService, RmqService, ConfigService]
+      providers: [CashbacksService, RmqService, ConfigService,
+        { provide: UsersService, useValue: mockUserService },
+        { provide: JwtAuthGuard, useValue: jest.fn().mockImplementation(() => true) },
+        { provide: AUTH_SERVICE, useValue: 'AUTH' }]
     }).compile();
 
     cashbacksController = moduleRef.get<CashbacksController>(CashbacksController);
@@ -49,11 +56,11 @@ describe('CashbacksController', () => {
       let cashbackData: CreateCachbackResponseDto
 
       beforeEach(async () => {
-        cashbackData = await cashbacksController.update('63b661bbf111cd23e52fdc6a',cashbackUpdateStub())
+        cashbackData = await cashbacksController.update('63b661bbf111cd23e52fdc6a', cashbackUpdateStub())
       })
 
       test('then it should call update from cashbacksService', () => {
-        expect(cashbacksService.update).toBeCalledWith('63b661bbf111cd23e52fdc6a',cashbackUpdateStub())
+        expect(cashbacksService.update).toBeCalledWith('63b661bbf111cd23e52fdc6a', cashbackUpdateStub())
       })
 
       test('then is should return a cashback data', async () => {
@@ -65,13 +72,15 @@ describe('CashbacksController', () => {
   describe('remove', () => {
     describe('when remove is called', () => {
       let cashbackData: CreateCachbackResponseDto
-
+      let updateCashbackDto = new RemoveCashbackDto
+      updateCashbackDto.status = 0
+      updateCashbackDto.isDeleted = 1
       beforeEach(async () => {
         cashbackData = await cashbacksController.remove('63b661bbf111cd23e52fdc6a')
       })
 
       test('then it should call update from cashbacksService', () => {
-        expect(cashbacksService.remove).toBeCalledWith('63b661bbf111cd23e52fdc6a')
+        expect(cashbacksService.remove).toBeCalledWith('63b661bbf111cd23e52fdc6a',updateCashbackDto)
       })
 
       test('then is should return a cashback data', async () => {
@@ -104,10 +113,10 @@ describe('CashbacksController', () => {
     })
   })
 
-  describe('handleTransactionCreated',() => {
+  describe('handleTransactionCreated', () => {
     describe('when handleTransactionCreated is called', () => {
-      let cashbackTrx: number 
-      
+      let cashbackTrx: number
+
       beforeEach(async () => {
         cashbackTrx = await cashbacksController.handleTransactionCreated(transactionSub())
       })

@@ -1,6 +1,9 @@
-import { RmqService } from "@app/common"
+import { JwtAuthGuard, RmqService } from "@app/common"
+import { AUTH_SERVICE } from "@app/common/auth/services"
+import { UsersService } from "../../../auth/src/users/users.service"
 import { ConfigService } from "@nestjs/config"
 import { Test } from "@nestjs/testing"
+import { RemoveRewardDto } from "../dto/reward/request/remove-rewarddto"
 import { RequestRewardDto } from "../dto/reward/request/request-reward.dto"
 import { CreateRewardResponseDto } from "../dto/reward/response/create-reward.response.dto"
 import { ResponseRewardDto } from "../dto/reward/response/response-reward.dto"
@@ -14,11 +17,18 @@ describe('RewardsController', () => {
   let rewardsController: RewardsController;
   let rewardsService: RewardsService;
 
+  const mockUserService = {}
+
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [],
       controllers: [RewardsController],
-      providers: [RewardsService, RmqService, ConfigService]
+      providers: [
+        RewardsService, RmqService, ConfigService,
+        {provide: UsersService, useValue: mockUserService},
+        {provide: JwtAuthGuard, useValue: jest.fn().mockImplementation(() => true)},
+        {provide: AUTH_SERVICE, useValue: 'AUTH'}
+      ]
     }).compile();
 
     rewardsController = moduleRef.get<RewardsController>(RewardsController);
@@ -49,11 +59,11 @@ describe('RewardsController', () => {
       let rewardData: CreateRewardResponseDto
 
       beforeEach(async () => {
-        rewardData = await rewardsController.update('63b661bbf111cd23e52fdc6a',rewardUpdateStub())
+        rewardData = await rewardsController.update('63b661bbf111cd23e52fdc6a', rewardUpdateStub())
       })
 
       test('then it should call update from rewardsService', () => {
-        expect(rewardsService.update).toBeCalledWith('63b661bbf111cd23e52fdc6a',rewardUpdateStub())
+        expect(rewardsService.update).toBeCalledWith('63b661bbf111cd23e52fdc6a', rewardUpdateStub())
       })
 
       test('then is should return a reward data', async () => {
@@ -65,13 +75,16 @@ describe('RewardsController', () => {
   describe('remove', () => {
     describe('when remove is called', () => {
       let rewardData: CreateRewardResponseDto
+      let updateRewardDto = new RemoveRewardDto
+      updateRewardDto.status = 0
+      updateRewardDto.isDeleted = 1
 
       beforeEach(async () => {
         rewardData = await rewardsController.remove('63b661bbf111cd23e52fdc6a')
       })
 
       test('then it should call update from rewardsService', () => {
-        expect(rewardsService.remove).toBeCalledWith('63b661bbf111cd23e52fdc6a')
+        expect(rewardsService.remove).toBeCalledWith('63b661bbf111cd23e52fdc6a',updateRewardDto)
       })
 
       test('then is should return a reward data', async () => {
@@ -104,10 +117,10 @@ describe('RewardsController', () => {
     })
   })
 
-  describe('handleTransactionCreated',() => {
+  describe('handleTransactionCreated', () => {
     describe('when handleTransactionCreated is called', () => {
-      let rewardTrx: number 
-      
+      let rewardTrx: number
+
       beforeEach(async () => {
         rewardTrx = await rewardsController.handleTransactionCreated(transactionSub())
       })

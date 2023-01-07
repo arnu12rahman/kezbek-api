@@ -81,7 +81,7 @@ describe('WalletsRepository', () => {
             })
 
             test('then it should call the findOneAndUpdate function on walletModel', () => {
-                expect(walletModel.findOneAndUpdate).toHaveBeenCalledWith(walletFilterQuery, walletStub(), { lean: true, new: true })
+                expect(walletModel.findOneAndUpdate).toHaveBeenCalledWith(walletFilterQuery, walletStub(), { lean: true, upsert: true, new: true })
             })
 
             test('then it should return as wallet', () => {

@@ -81,7 +81,7 @@ describe('PartnersRepository', () => {
             })
 
             test('then it should call the findOneAndUpdate function on partnerModel', () => {
-                expect(partnerModel.findOneAndUpdate).toHaveBeenCalledWith(partnerFilterQuery, partnerStub(), { lean: true, new: true })
+                expect(partnerModel.findOneAndUpdate).toHaveBeenCalledWith(partnerFilterQuery, partnerStub(), { lean: true, upsert: true, new: true })
             })
 
             test('then it should return as partner', () => {

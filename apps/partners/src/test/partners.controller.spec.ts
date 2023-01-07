@@ -1,4 +1,6 @@
-import { RmqService } from "@app/common"
+import { JwtAuthGuard, RmqService } from "@app/common"
+import { AUTH_SERVICE } from "@app/common/auth/services"
+import { UsersService } from "../../../auth/src/users/users.service"
 import { ConfigService } from "@nestjs/config"
 import { Test } from "@nestjs/testing"
 import { PartnerDto } from "../dto/core/partner.dto"
@@ -7,19 +9,24 @@ import { CreatePartnerResponseDto } from "../dto/response/create-partnerresponse
 import { ResponsePartnerDto } from "../dto/response/response-partner.dto"
 import { PartnersController } from "../partners.controller"
 import { PartnersService } from "../partners.service"
-import { partnerCreateStub, partnerUpdateStub, findPartnerStub, responsePartnerCreateStub, responsePartnerDeleteStub,  responsePartnerUpdateStub, partnerStub, transactionSub } from "./stubs/partner.stub"
+import { partnerCreateStub, partnerUpdateStub, findPartnerStub, responsePartnerCreateStub, responsePartnerDeleteStub, responsePartnerUpdateStub, partnerStub, transactionSub } from "./stubs/partner.stub"
+import { RemovePartnerDto } from "../dto/request/remove-partnerdto"
 
 jest.mock('../partners.service')
 
 describe('PartnersController', () => {
   let partnersController: PartnersController;
   let partnersService: PartnersService;
+  const mockUserService = {}
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [],
       controllers: [PartnersController],
-      providers: [PartnersService, RmqService, ConfigService]
+      providers: [PartnersService, RmqService, ConfigService,
+        { provide: UsersService, useValue: mockUserService },
+        { provide: JwtAuthGuard, useValue: jest.fn().mockImplementation(() => true) },
+        { provide: AUTH_SERVICE, useValue: 'AUTH' }]
     }).compile();
 
     partnersController = moduleRef.get<PartnersController>(PartnersController);
@@ -50,11 +57,11 @@ describe('PartnersController', () => {
       let partnerData: CreatePartnerResponseDto
 
       beforeEach(async () => {
-        partnerData = await partnersController.update('63b661bbf111cd23e52fdc6a',partnerUpdateStub())
+        partnerData = await partnersController.update('63b661bbf111cd23e52fdc6a', partnerUpdateStub())
       })
 
       test('then it should call update from partnersService', () => {
-        expect(partnersService.update).toBeCalledWith('63b661bbf111cd23e52fdc6a',partnerUpdateStub())
+        expect(partnersService.update).toBeCalledWith('63b661bbf111cd23e52fdc6a', partnerUpdateStub())
       })
 
       test('then is should return a partner data', async () => {
@@ -66,13 +73,15 @@ describe('PartnersController', () => {
   describe('remove', () => {
     describe('when remove is called', () => {
       let partnerData: CreatePartnerResponseDto
-
+      let updatePartnerDto = new RemovePartnerDto
+      updatePartnerDto.status = 0
+      updatePartnerDto.isDeleted = 1
       beforeEach(async () => {
         partnerData = await partnersController.remove('63b661bbf111cd23e52fdc6a')
       })
 
       test('then it should call update from partnersService', () => {
-        expect(partnersService.remove).toBeCalledWith('63b661bbf111cd23e52fdc6a')
+        expect(partnersService.remove).toBeCalledWith('63b661bbf111cd23e52fdc6a',updatePartnerDto)
       })
 
       test('then is should return a partner data', async () => {
@@ -107,10 +116,10 @@ describe('PartnersController', () => {
     })
   })
 
-  describe('handleTransactionCreated',() => {
+  describe('handleTransactionCreated', () => {
     describe('when handleTransactionCreated is called', () => {
-      let partnerData: PartnerDto 
-      
+      let partnerData: PartnerDto
+
       beforeEach(async () => {
         partnerData = await partnersController.handleTransactionCreated(transactionSub())
       })

@@ -81,7 +81,7 @@ describe('CashbacksRepository', () => {
             })
 
             test('then it should call the findOneAndUpdate function on cashbackModel', () => {
-                expect(cashbackModel.findOneAndUpdate).toHaveBeenCalledWith(cashbackFilterQuery, cashbackStub(), { lean: true, new: true })
+                expect(cashbackModel.findOneAndUpdate).toHaveBeenCalledWith(cashbackFilterQuery, cashbackStub(), { lean: true, upsert: true, new: true })
             })
 
             test('then it should return as cashback', () => {
