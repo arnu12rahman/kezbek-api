@@ -8,6 +8,7 @@ import {
   Connection,
 } from 'mongoose';
 import { AbstractDocument } from './abstract.schema';
+import * as sanitize from 'mongo-sanitize'
 
 export abstract class AbstractRepository<TDocument extends AbstractDocument> {
   protected abstract readonly logger: Logger;
@@ -56,6 +57,7 @@ export abstract class AbstractRepository<TDocument extends AbstractDocument> {
     filterQuery: FilterQuery<TDocument>,
     update: Partial<TDocument>,
   ) {
+    update = sanitize(update)
     const document = this.model.findOneAndUpdate(filterQuery, update, {
       lean: true,
       upsert: true,
