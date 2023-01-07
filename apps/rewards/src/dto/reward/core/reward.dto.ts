@@ -22,9 +22,13 @@ export class RewardDto {
     @IsNotEmpty()
     rewardAmount: number;
 
-    @ApiProperty({ required: false })
+    @ApiProperty({required: false})
+    @IsPositive()
+    @IsNumber()
     status: number;
 
-    @ApiProperty({ required: false })
+    @ApiProperty({required: false})
+    @IsPositive()
+    @IsNumber()
     isDeleted: number;
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger/dist/decorators"
-import { IsOptional, IsPhoneNumber, IsEmail, IsString, IsNotEmpty } from "class-validator"
+import { IsOptional, IsPhoneNumber, IsEmail, IsString, IsNotEmpty, IsPositive, IsNumber } from "class-validator"
 
 export class PartnerDto {
     @IsOptional()
@@ -32,9 +32,13 @@ export class PartnerDto {
     @IsNotEmpty()
     partnerAddress: string;
 
-    @ApiProperty({ required: false })
+    @ApiProperty({required: false})
+    @IsPositive()
+    @IsNumber()
     status: number;
 
-    @ApiProperty({ required: false })
+    @ApiProperty({required: false})
+    @IsPositive()
+    @IsNumber()
     isDeleted: number;
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger/dist/decorators"
-import {IsOptional, IsNotEmpty, IsString, IsDateString, IsEmail, IsPhoneNumber, IsPositive } from "class-validator"
+import {IsOptional, IsNotEmpty, IsString, IsDateString, IsEmail, IsPhoneNumber, IsPositive, IsNumber } from "class-validator"
 
 export class WalletDto {
     @IsOptional()
@@ -34,8 +34,12 @@ export class WalletDto {
     lastBalance: number;
 
     @ApiProperty({required: false})
+    @IsPositive()
+    @IsNumber()
     status: number;
 
     @ApiProperty({required: false})
+    @IsPositive()
+    @IsNumber()
     isDeleted: number;
 }

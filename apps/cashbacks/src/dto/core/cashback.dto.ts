@@ -53,8 +53,12 @@ export class CashbackDto {
     percentageCashback: number;
 
     @ApiProperty({required: false})
+    @IsPositive()
+    @IsNumber()
     status: number;
 
     @ApiProperty({required: false})
+    @IsPositive()
+    @IsNumber()
     isDeleted: number;
 }
