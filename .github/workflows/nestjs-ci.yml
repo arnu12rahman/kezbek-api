@@ -39,43 +39,43 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push
+      - name: Build and push auth service
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: arnurahman/kezbek-app.auth-service:latest
           file: apps/auth/Dockerfile
-      - name: Build and push
+      - name: Build and push transactions service
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: arnurahman/kezbek-app.transactions-service:latest
           file: apps/transactions/Dockerfile
-      - name: Build and push
+      - name: Build and push cashbacks service
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: arnurahman/kezbek-app.cashbacks-service:latest
           file: apps/cashbacks/Dockerfile
-      - name: Build and push
+      - name: Build and push rewards service
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: arnurahman/kezbek-app.rewards-service:latest
           file: apps/rewards/Dockerfile
-      - name: Build and push
+      - name: Build and push partners service
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: arnurahman/kezbek-app.partners-service:latest
           file: apps/partners/Dockerfile
-      - name: Build and push
+      - name: Build and push wallets service
         uses: docker/build-push-action@v3
         with:
           push: true
           tags: arnurahman/kezbek-app.wallets-service:latest
           file: apps/wallets/Dockerfile
-      - name: Build and push
+      - name: Build and push notifications service
         uses: docker/build-push-action@v3
         with:
           push: true
