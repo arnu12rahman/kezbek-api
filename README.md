@@ -78,7 +78,9 @@ In terms of technology Kezbek API/Apps uses several technologies to structure it
 #### Data Structure
 
 ---
-
+<div style="text-align:center">
+  <img src="https://github.com/arnu12rahman/kezbek-api/blob/master/doc/dbKezbek.jpg?raw=true" alt="Monorepo" style="width:800px;text-align:center;"/>
+</div>
 
 #### System Migration
 
