@@ -43,7 +43,44 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: arnurahman/kezbek-app:latest
+          tags: arnurahman/kezbek-app.auth-service:latest
+          file: apps/auth/Dockerfile
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: arnurahman/kezbek-app.transactions-service:latest
+          file: apps/transactions/Dockerfile
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: arnurahman/kezbek-app.cashbacks-service:latest
+          file: apps/cashbacks/Dockerfile
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: arnurahman/kezbek-app.rewards-service:latest
+          file: apps/rewards/Dockerfile
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: arnurahman/kezbek-app.partners-service:latest
+          file: apps/partners/Dockerfile
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: arnurahman/kezbek-app.wallets-service:latest
+          file: apps/wallets/Dockerfile
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          tags: arnurahman/kezbek-app.notifications-service:latest
+          file: apps/notifications/Dockerfile
             
             
             
