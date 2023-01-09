@@ -99,16 +99,12 @@ Enter the project folder using the command `cd`
 cd kezbek-app
 ```
 
-Build the image using the command `docker build -t`
-
-```
-docker build -t kezbek-app .
-```
+Create .env file with all credential and config in ./apps/ directory
 
 Running container/service api and database with `docker compose`
 
 ```
-docker compose up -d
+docker compose up
 ```
 
 For Test with `npm run test`
@@ -116,6 +112,7 @@ For Test with `npm run test`
 ```
 npm run test
 ```
+*if any error when running npm run test just running command `npm install` first then test again
 
 #### Swagger Doc
 
