@@ -1,0 +1,532 @@
+{
+	"info": {
+		"_postman_id": "1fc1e698-0770-4ed4-80fb-7697e4beccd4",
+		"name": "Kezbek-App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3325116"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"arnu12rahman@gmail.com\",\r\n  \"password\": \"test12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3005/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"arnu12rahman@gmail.com\",\r\n  \"password\": \"test12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3005/auth/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"auth",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cashback",
+			"item": [
+				{
+					"name": "Get Cashbacks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/cashbacks?page=1&limit=10&cashbackReferCode=kez07bek",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"cashbacks"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "cashbackReferCode",
+									"value": "kez07bek"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Cashback",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cashbackReferCode\": \"kez07bek\",\r\n  \"minQty\": 3,\r\n  \"maxQty\": 0,\r\n  \"isSetMaxQty\": 0,\r\n  \"minAmountTrans\": 1500000,\r\n  \"maxAmountTrans\": 0,\r\n  \"isSetMaxAmountTrans\": 0,\r\n  \"percentageCashback\": 3.35\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/cashbacks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"cashbacks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cashback",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cashbackReferCode\": \"kez07bek\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/cashbacks/63b661bbf111cd23e52fdc6a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"cashbacks",
+								"63b661bbf111cd23e52fdc6a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Cashback",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3001/cashbacks/63b661bbf111cd23e52fdc6a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"cashbacks",
+								"63b661bbf111cd23e52fdc6a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Reward",
+			"item": [
+				{
+					"name": "Get Rewards",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/rewards?page=1&limit=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"rewards"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Reward",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"tier\": \"gold\",\r\n  \"recurring\": 7,\r\n  \"rewardAmount\": 38000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/rewards",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"rewards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reward",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"recurring\": 2,\r\n  \"rewardAmount\": 10000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3002/rewards/63b6c731525491b3acdcc543",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"rewards",
+								"63b6c731525491b3acdcc543"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Reward",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3002/rewards/63b7a905f93b82963f2b2e41",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"rewards",
+								"63b7a905f93b82963f2b2e41"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Partner",
+			"item": [
+				{
+					"name": "Get Partners",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3003/partners?page=1&limit=10&partnerName=ShopeeShop&partnerEmail=Shopee@gmail.com&partnerMsisdn=+628111379309",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3003",
+							"path": [
+								"partners"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "partnerName",
+									"value": "ShopeeShop"
+								},
+								{
+									"key": "partnerEmail",
+									"value": "Shopee@gmail.com"
+								},
+								{
+									"key": "partnerMsisdn",
+									"value": "+628111379309"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Partner",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partnerReferCode\": \"shp_kzb\",\r\n  \"partnerName\": \"Shopee\",\r\n  \"partnerEmail\": \"Shopee@gmail.com\",\r\n  \"partnerMsisdn\": \"+628111379309\",\r\n  \"partnerAddress\": \"Jakarta\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3003/partners",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3003",
+							"path": [
+								"partners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Partner",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"partnerReferCode\": \"shp_kzb_\",\r\n  \"partnerName\": \"ShopeeShop\",\r\n  \"partnerEmail\": \"Shopee@gmail.com\",\r\n  \"partnerMsisdn\": \"+628111379309\",\r\n  \"partnerAddress\": \"Jakarta\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3003/partners/63b512c9b315e8427c643118",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3003",
+							"path": [
+								"partners",
+								"63b512c9b315e8427c643118"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Partner",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3003/partners/63b512c9b315e8427c643118",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3003",
+							"path": [
+								"partners",
+								"63b512c9b315e8427c643118"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallet",
+			"item": [
+				{
+					"name": "Get Wallets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3004/wallets?page=1&limit=10&customerEmail=arnu12rahman@gmail.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"wallets"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "customerEmail",
+									"value": "arnu12rahman@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Get Transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/transactions?page=1&limit=10&customerEmail=arstrois2@gmail.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "customerEmail",
+									"value": "arstrois2@gmail.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit Transaction",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"trxDate\": \"2023-01-20\",\r\n  \"customerEmail\": \"arnu12rahman@gmail.com\",\r\n  \"customerMsisdn\": \"+628111379309\",\r\n  \"partnerReferCode\": \"shp_kzb\",\r\n  \"cashbackReferCode\": \"testcodepromo\",\r\n  \"qty\": 1,\r\n  \"checkoutTotal\": 10000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/transactions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transactions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
