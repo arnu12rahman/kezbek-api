@@ -13,9 +13,7 @@ services:
     env_file:
       - ./apps/.env
     depends_on:
-      - mongodb-primary
-      - mongodb-secondary
-      - mongodb-arbiter
+      - mongo
       - rabbitmq
       - cashbacks
       - rewards
@@ -43,9 +41,7 @@ services:
     env_file:
       - ./apps/.env
     depends_on:
-      - mongodb-primary
-      - mongodb-secondary
-      - mongodb-arbiter
+      - mongo
       - auth
       - rabbitmq
     volumes:
@@ -68,9 +64,7 @@ services:
     env_file:
       - ./apps/.env
     depends_on:
-      - mongodb-primary
-      - mongodb-secondary
-      - mongodb-arbiter
+      - mongo
       - auth
       - rabbitmq
     volumes:
@@ -93,9 +87,7 @@ services:
     env_file:
       - ./apps/.env
     depends_on:
-      - mongodb-primary
-      - mongodb-secondary
-      - mongodb-arbiter
+      - mongo
       - auth
       - rabbitmq
     volumes:
@@ -138,9 +130,7 @@ services:
     env_file:
       - ./apps/.env
     depends_on:
-      - mongodb-primary
-      - mongodb-secondary
-      - mongodb-arbiter
+      - mongo
       - auth
       - rabbitmq
     volumes:
@@ -163,9 +153,7 @@ services:
     env_file:
       - ./apps/.env
     depends_on:
-      - mongodb-primary
-      - mongodb-secondary
-      - mongodb-arbiter
+      - mongo
       - rabbitmq
     volumes:
       - .:/usr/src/app
@@ -181,53 +169,15 @@ services:
     ports:
       - '5672:5672'
 
-  mongodb-primary:
-    image: bitnami/mongodb:latest
+  mongo:
+    image: mongo
     restart: on-failure
-    container_name: mongodb-primary
-    hostname: mongodb-primary
+    container_name: mongo
+    hostname: mongo
     environment:
-      - MONGODB_ADVERTISED_HOSTNAME=mongodb-primary
-      - MONGODB_REPLICA_SET_MODE=primary
-      - MONGODB_ROOT_PASSWORD=superuser
-      - MONGODB_DATABASE=kezbekapp
-      - MONGODB_REPLICA_SET_KEY=replicasetkey1212
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: superuser
     volumes:
-      - 'mongodb_master_data:/bitnami'
       - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
       - '27017:27017'
-
-  mongodb-secondary:
-    image: bitnami/mongodb:latest
-    restart: on-failure
-    container_name: mongodb-secondary
-    hostname: mongodb-secondary
-    depends_on:
-      - mongodb-primary
-    environment:
-      - MONGODB_ADVERTISED_HOSTNAME=mongodb-secondary
-      - MONGODB_REPLICA_SET_MODE=secondary
-      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
-      - MONGODB_INITIAL_PRIMARY_PORT_NUMBER=27017
-      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=superuser
-      - MONGODB_REPLICA_SET_KEY=replicasetkey1212
-
-  mongodb-arbiter:
-    image: bitnami/mongodb:latest
-    restart: on-failure
-    container_name: mongodb-arbiter
-    hostname: mongodb-arbiter
-    depends_on:
-      - mongodb-primary
-    environment:
-      - MONGODB_ADVERTISED_HOSTNAME=mongodb-arbiter
-      - MONGODB_REPLICA_SET_MODE=arbiter
-      - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
-      - MONGODB_INITIAL_PRIMARY_PORT_NUMBER=27017
-      - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=superuser
-      - MONGODB_REPLICA_SET_KEY=replicasetkey1212
-
-volumes:
-  mongodb_master_data:
-    driver: local

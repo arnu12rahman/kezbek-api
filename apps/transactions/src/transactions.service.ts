@@ -18,26 +18,23 @@ export class TransactionsService extends PageService {
   ) { super() }
 
   async createTransaction(request: CreateTransactionDto, authentication: string) {
-    const session = await this.transactionRepository.startTransaction()
     try {
       const partnerData = await firstValueFrom(this.partnerClient.send('get_partner_detail', { request, Authentication: authentication }))
-      if(!partnerData)
+      if (!partnerData)
         throw new NotFoundException('Partner Data Not Found!')
 
-      request = {...request, partnerId: partnerData._id, partnerName: partnerData.partnerName}
-      const transaction = await this.transactionRepository.create(request, { session })
+      request = { ...request, partnerId: partnerData._id, partnerName: partnerData.partnerName }
+      const transaction = await this.transactionRepository.create(request)
 
       //get cashback
-      const cashbackReward = await firstValueFrom(this.rewardClient.send('calculate_reward', { transaction, Authentication: authentication }))
+      const cashbackReward = await lastValueFrom(this.rewardClient.send('calculate_reward', { transaction, Authentication: authentication }))
       const cashbackTrx = await firstValueFrom(this.cashbackClient.send('calculate_cashback', { transaction, Authentication: authentication }))
 
       //calculate cashback
       const cashbackTotal = this.calculateCashback(transaction._id, cashbackReward, cashbackTrx, authentication)
-      await session.commitTransaction()
 
       return cashbackTotal
     } catch (err) {
-      await session.abortTransaction()
       throw err
     }
   }

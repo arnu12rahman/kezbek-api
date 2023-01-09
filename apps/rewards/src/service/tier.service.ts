@@ -9,7 +9,7 @@ export class TierService {
         //check if any trx in current month
         const trxMonthDate = moment(data.transaction.trxDate).subtract(1, 'months').format('YYYY-MM-DD')
         let trxMonthData = await repo.findOne({
-            $and: [{ trxDate: {$gte: trxMonthDate, $lte: data.transaction.trxDate} }, { createdAt: { $ne: data.transaction.createdAt } }]
+            $and: [{ trxDate: { $gte: trxMonthDate, $lte: data.transaction.trxDate } }, { createdAt: { $ne: data.transaction.createdAt } }]
         })
 
         return trxMonthData
@@ -70,17 +70,17 @@ export class TierService {
         }
         if (tierData) {
             const currTier = this.upgradeTierCat(tierData.tier, tierData.lastTier, tierData.trxRecurring + 1)
-            upgradeData = await tierRepo.findOneAndUpdate({ _id: tierData._id }, {
-                "$set": {
+            upgradeData = await tierRepo.upsert({ _id: tierData._id },
+                {
                     tier: currTier.newTier,
                     trxRecurring: currTier.newRecurring,
                     lastTier: currTier.newLastTier,
                     expDate: moment(new Date()).add(1, 'months').format('YYYY-MM-DD')
                 }
-            })
+            )
 
             //add to journey tier
-            if(tierData.tier != currTier.newTier)
+            if (tierData.tier != currTier.newTier)
                 this.journeyTier(data, upgradeData, journeyRepo)
         }
 
@@ -95,14 +95,14 @@ export class TierService {
             downgradeData = await this.firstTier(data, tierRepo)
         } else {
             //downgrade data
-            downgradeData = await tierRepo.findOneAndUpdate({ _id: tierData._id }, {
-                "$set": {
+            downgradeData = await tierRepo.upsert({ _id: tierData._id },
+                {
                     tier: this.downgradeTierCat(tierData.tier),
                     trxRecurring: 0,
                     lastTier: tierData.tier,
                     expDate: moment(new Date()).add(1, 'months').format('YYYY-MM-DD')
                 }
-            })
+            )
         }
 
         //add to journey tier
