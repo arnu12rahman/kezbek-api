@@ -22,7 +22,7 @@ import { UsersModule } from './users/users.module';
         MONGODB_URI: Joi.string().required(),
         PORT_AUTH: Joi.number().required()
       }),
-      envFilePath: './apps/.env',
+      envFilePath: './apps/auth/.env',
     }),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => ({

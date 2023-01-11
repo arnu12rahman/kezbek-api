@@ -11,7 +11,7 @@ services:
     environment:
       TZ: "Asia/Jakarta"
     env_file:
-      - ./apps/.env
+      - ./apps/transactions/.env
     depends_on:
       - mongo
       - rabbitmq
@@ -39,7 +39,7 @@ services:
     environment:
       TZ: "Asia/Jakarta"
     env_file:
-      - ./apps/.env
+      - ./apps/cashbacks/.env
     depends_on:
       - mongo
       - auth
@@ -62,7 +62,7 @@ services:
     environment:
       TZ: "Asia/Jakarta"
     env_file:
-      - ./apps/.env
+      - ./apps/rewards/.env
     depends_on:
       - mongo
       - auth
@@ -85,7 +85,7 @@ services:
     environment:
       TZ: "Asia/Jakarta"
     env_file:
-      - ./apps/.env
+      - ./apps/partners/.env
     depends_on:
       - mongo
       - auth
@@ -108,7 +108,7 @@ services:
     environment:
       TZ: "Asia/Jakarta"
     env_file:
-      - ./apps/.env
+      - ./apps/notifications/.env
     depends_on:
       - auth
       - rabbitmq
@@ -128,7 +128,7 @@ services:
     environment:
       TZ: "Asia/Jakarta"
     env_file:
-      - ./apps/.env
+      - ./apps/wallets/.env
     depends_on:
       - mongo
       - auth
@@ -151,7 +151,7 @@ services:
     environment:
       TZ: "Asia/Jakarta"
     env_file:
-      - ./apps/.env
+      - ./apps/auth/.env
     depends_on:
       - mongo
       - rabbitmq

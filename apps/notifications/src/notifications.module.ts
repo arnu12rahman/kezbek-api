@@ -9,6 +9,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { join } from 'path';
 import * as dotenv from 'dotenv'
 dotenv.config();
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -17,7 +18,7 @@ dotenv.config();
         RABBIT_MQ_URI: Joi.string().required(),
         RABBIT_MQ_NOTIFICATION_QUEUE: Joi.string().required(),
       }),
-      envFilePath: './apps/.env'
+      envFilePath: './apps/notifications/.env'
     }),
     MailerModule.forRoot({
       transport: {

@@ -18,7 +18,7 @@ import { Partner, PartnerSchema } from './schemas/partner.schema';
         MONGODB_URI: Joi.string().required(),
         PORT_PARTNERS: Joi.number().required()
       }),
-      envFilePath: './apps/.env'
+      envFilePath: './apps/partners/.env'
     }),
     DatabaseModule,
     MongooseModule.forFeature([{name: Partner.name, schema: PartnerSchema}]),

@@ -24,7 +24,7 @@ import { Tier, TierSchema } from './schemas/tier.schema';
         MONGODB_URI: Joi.string().required(),
         PORT_REWARDS: Joi.number().required()
       }),
-      envFilePath: './apps/.env'
+      envFilePath: './apps/rewards/.env'
     }),
     DatabaseModule,
     MongooseModule.forFeature([

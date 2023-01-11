@@ -18,7 +18,7 @@ import { TransactionsService } from './transactions.service';
         MONGODB_URI: Joi.string().required(),
         PORT: Joi.number().required()
       }),
-      envFilePath: './apps/.env'
+      envFilePath: './apps/transactions/.env'
     }),
     DatabaseModule,
     MongooseModule.forFeature([{name: Transaction.name, schema: TransactionSchema}]),

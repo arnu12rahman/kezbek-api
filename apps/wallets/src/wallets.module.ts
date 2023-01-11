@@ -18,7 +18,7 @@ import { WalletsRepository } from './wallets.repository';
         MONGODB_URI: Joi.string().required(),
         PORT_WALLETS: Joi.number().required()
       }),
-      envFilePath: './apps/.env'
+      envFilePath: './apps/wallets/.env'
     }),
     DatabaseModule,
     MongooseModule.forFeature([{name: Wallet.name, schema: WalletSchema}]),

@@ -20,7 +20,7 @@ import { Cashback, CashbackSchema } from './schemas/cashback.schema';
         MONGODB_URI: Joi.string().required(),
         PORT_CASHBACKS: Joi.number().required()
       }),
-      envFilePath: './apps/.env'
+      envFilePath: './apps/cashbacks/.env'
     }),
     DatabaseModule,
     MongooseModule.forFeature([{name: Transaction.name, schema: TransactionSchema},{name: Cashback.name, schema: CashbackSchema}]),
