@@ -53,20 +53,17 @@ export class CashbacksService extends PageService {
         {
           status: 1,
           isSetMaxQty: 1,
-          minQty: { $gte: data.transaction.qty },
-          maxQty: { $lte: data.transaction.qty },
+          minQty: { $lte: data.transaction.qty },
+          maxQty: { $gte: data.transaction.qty },
           isSetMaxAmountTrans: 1,
-          $or: [
-            { minAmountTrans: { $gt: data.transaction.checkoutTotal, $lt: data.transaction.checkoutTotal } },
-            { maxAmountTrans: { $gt: data.transaction.checkoutTotal, $lt: data.transaction.checkoutTotal } },
-            { minAmountTrans: { $lt: data.transaction.checkoutTotal }, maxAmountTrans: { $gt: data.transaction.checkoutTotal } }
-          ]
+          minAmountTrans: { $lte: data.transaction.checkoutTotal },
+          maxAmountTrans: { $gte: data.transaction.checkoutTotal }
         },
         {
           status: 1,
           isSetMaxQty: 1,
-          minQty: { $gte: data.transaction.qty },
-          maxQty: { $lte: data.transaction.qty },
+          minQty: { $lte: data.transaction.qty },
+          maxQty: { $gte: data.transaction.qty },
           isSetMaxAmountTrans: 0,
           minAmountTrans: { $gte: data.transaction.checkoutTotal },
         },
